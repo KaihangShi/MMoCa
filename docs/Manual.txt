@@ -1,0 +1,482 @@
+*********************************************
+MC PROGRAME USER GUIDE (current version v2.2)
+Author: Kaihang Shi (kaihangshi0@gmail.com)
+12/2016 - 6/2020
+*********************************************
+
+=======================
+1. File types
+=======================
+REQUIRED INPUT FILES:
+input.in                   - contains all the control parameters for the simulation
+mol.in                     - contains molecular structure and force field parameters
+
+OPTIONAL INPUT FILES:
+coords.in                  - contains x,y,z coordinates for the external structure, 
+                             such as solid substrate/porous materials
+initconfig.in              - contains x,y,z coordinates for restart purpose. 
+                             The file has the same file structure as the xyz format output file
+cg_wall.in                 - pre-calculated solid-fluid potential [K] for coarse-grained wall
+cg_wall_strc.in            - pre-calculated structure information of coarse-grained wall
+                             (parameter La [Angstrom] in my 2D coarse-grained surface model, compatible
+                               with AW-FEA solid-fluid potential)
+eff_sig.in                 - pre-calculated sigma value [Angstrom] for fluid-fluid interaction.
+                             (This file is used when "CG_WALL_FFPW" command is on, but obsolete now)
+
+
+OUTPUT FILES:
+config_site_AAA.xyz        - output configuration for the whole system in xyz format at AAA step
+z-density.txt              - output density profile in z-direction
+r-density.txt              - output density profile for the cylindrical system at a constant-R surface
+surface_excess.txt         - output surface excess 
+press_1.txt                - output pressure tensor of Irving-Kirkwood definition for a planar interface (bulk)
+press_2.txt                - output pressure tensor of Harasima definition for a planar interface (bulk)
+press_slit_1.txt           - output pressure tensor of Irving-Kirkwood definition for the slit system
+press_slit_2.txt           - output pressure tensor of Harasima definition for the slit system
+press_slit_3.txt           - output pressure tensor of H-VR definition for the slit system
+press_slit_4.txt           - output pressure tensor of IK-VR definition for the slit system
+press_cylinH.txt           - output pressure tensor of Harasima definition for the cylindrical system
+lattconst.txt              - output lattice constant for specified adsorbed layer 
+                             The values are calculated by mapping the layer into strictly 2D. 
+dump_qst.txt               - output isosteric heat
+dump_xyz.txt               - output xyz coordinates for the whole system at MC steps
+density.txt                - output density of the whole system at a specified interval
+energy.txt                 - output total energy of the system at a specified interval. Units [J]
+virial.txt                 - output hydrostatic pressure [bar], instant virial [J] (Allen&Tildesley 2.61), hypervirial [J] (Allen&Tildesley 2.77) 
+                             of the system at a specified interval.
+rst1.xyz                   - instantaneous configuraiton (in XYZ format) of the system which could be used as a restart file
+rst2.xyz                   - copy of rst1.xyz (no longer available in v2.2)
+
+===========================
+2. Units in the simulation
+===========================
+The energy quantities are processed in units of [K]
+The size quantities are processed in units of [Angstrom]
+For example, LJ epsilon parameter [K], LJ sigma parameter [Angstrom]
+Note: epsilon(1,1,2,2) means epsilon between site 1 on molecule type 1 and site 2 on moelcule type 2
+
+
+=======================================================================
+3. "input.in" file 
+WARNING: Keep all labels in the input.in file, 
+DO NOT change/add/delete labels in input.in file. 
+For example, leave the "Pressure [bar]" label even if the 
+ensemble is not NPT, the MC program will automatically skip this label.
+Variables required under each label are explained.
+=======================================================================
+Ensemble
+    'NVT' - canonical ensemble
+    'NPT' - isobaric-isothermal ensemble (current version only allows cubic box and there is no external structure in the box)
+    'uVT' - grand canonical ensemble
+
+Temperature [K]
+    temp - Temperature of the system.
+            Double precision.
+
+Pressure [bar]
+    press - Pressure of the system, only effective when
+            ensemble is "NPT". Double precision.
+
+Number of Boxes
+    n_box - In the current verison (v1.7), only one box is needed.
+            I haven't coded two box version for Gibbs ensemble yet.
+            Integer.
+
+Number of Molecule Types
+    n_mol_types - Integer.
+
+Maximum Number of Sites on the Molecule
+    n_sites_max - Integer.
+
+Number of Nonbonded Types
+    n_nonbond_types - Number of nonbonded interaction site types. 
+                      Used for cross check with mol.in file. Integer.
+
+Chemical Potential [K]
+    mu(molecule type 1) mu(molecule type 2) ...
+                    - Only effective when "uVT" ensemble. Double precision.
+
+Number of Molecules
+    n_mol(molecule type 1) n_mol(molecule type 2)...
+                    - Number of molecules for each molecule type. Integer.
+
+Potential Form
+    'Lennard-Jones' - 12-6 LJ nonbonded interactions, only this format
+                    has been coded for now.
+
+Mixing Rules
+    'Lorentz-Berthelot' - The cross-interaction term will be 
+                          automatically calculated.
+    'Explicit'          - Cross-interaction parameters should be 
+                          explicitly listed in mol.in file. I wrote this 
+                          for my conformal sites model project, especially for 
+                          Coulombic interactions.
+
+Tail Correction
+    '.true.' or '.false.'
+    - Standard tail correction beyond cutoff radius.
+      Suitable for the bulk phase calculation. Logical.
+
+r_cutoff [A]
+    r_cut - Cutoff radius. Double precision
+
+r_min [A]
+    r_min - minimum radius below which the calculation of interaction 
+            energy is neglected. To speed the simulation. Double precision.
+
+External Field
+    '.true.' or '.false.'
+    - Flag to turn on/off external field. Logical.
+
+Field Type
+    Choices are:
+
+    'hard_wall'                 - Hard wall potential placed at the bottom 
+                                    and the top of the simulation box (center is set at z=0).
+    Half Thickness
+    wall_radius                 - Half thickness of the hard wall. One half will
+                                    be placed at the bottom, the other will be 
+                                    placed at the top of the box.
+--------------------
+    'hard_slit_finitex'         - Hard slit wall with averaging region in the middle.
+                                  I used it for Yun's model together with an explicit 
+                                  slit pore grapite structure. Modify the code if other structure is used.
+    Half Thickness
+    wall_radius                 - Half thickness of the hard wall. One half will
+                                    be placed at the bottom, the other will be 
+                                    placed at the top of the box.
+    Averaging Region
+    steele_avgx(1) steele_avgx(2) 
+                                - Read in lower (1) and upper bound (2) of averaging region
+                                 in the x-direction; this can be set freely since v2.2
+------------------------
+    'steele_wall'               - 10-4-3 Steele wall perpendicular to the z-direction (single wall version)
+    Position [A]
+    steele_position(1)          - Position of steele wall at the bottom of the box;
+                                 There will also be a corresponding hard wall on the top
+                                 of the box in the z-direction.
+    Cutoff [A]
+    steele_cut                  - Cutoff radius for Steele wall
+    Delta [A]
+    steele_delta                - delta parameter in Steele potential corresponding to 
+                                    the effective interlayer distance
+    Rho_s [A^-3]
+    steele_rhos                 - Solid density
+    Interaction Parameters
+    steele_site_name(1) steele_sigmasf(1) steele_epsilonsf(1)  
+    steele_site_name(2) steele_sigmasf(2) steele_epsilonsf(2)
+    ... all nonbond types       - Cross-interaction parameters of sigma and epsilon for 
+                                    solid-fluid interaction, instead of fluid-fluid 
+                                    interaction parameters. The read_input subroutine loop 
+                                    over all nonbonded types.
+                                  WARNING: steele_site_name should match site_type_name
+                                  specified in 'mol.in' file.
+----------------------------
+    'steele_slit_pore'          - 10-4-3 Steele wall (slit pore geometry)
+    Position [A]
+    steele_position(1)          - Position of steele wall at the bottom of the box;
+                                 There will also be a corresponding steele wall on the top
+                                 of the box in the z-direction.
+    Cutoff [A]
+    steele_cut                  - Cutoff radius for Steele wall
+    Delta [A]
+    steele_delta                - delta parameter in Steele potential corresponding to 
+                                    the effective interlayer distance
+    Rho_s [A^-3]
+    steele_rhos                 - Solid density
+    Interaction Parameters
+    steele_site_name(1) steele_sigmasf(1) steele_epsilonsf(1)  
+    steele_site_name(2) steele_sigmasf(2) steele_epsilonsf(2)
+    ...                         - Cross-interaction parameters of sigma and epsilon for 
+                                    solid-fluid interaction, instead of fluid-fluid 
+                                    interaction parameters. The read_input subroutine loop 
+                                    over all nonbonded types.
+                                  WARNING: steele_site_name should match site_type_name
+                                  specified in 'mol.in' file.
+-----------------------------
+    'steele_slit_finitex'       - 10-4-3 Steele wall (slit pore geometry)
+    Position [A]
+    steele_position(1)          - Position of steele wall at the bottom of the box;
+                                 There will also be a corresponding steele wall on the top
+                                 of the box in the z-direction.
+    Cutoff [A]
+    steele_cut                  - Cutoff radius for Steele wall
+    Delta [A]
+    steele_delta                - delta parameter in Steele potential corresponding to 
+                                    the effective interlayer distance
+    Rho_s [A^-3]
+    steele_rhos                 - Solid density
+    Interaction Parameters
+    steele_site_name(1) steele_sigmasf(1) steele_epsilonsf(1)  
+    steele_site_name(2) steele_sigmasf(2) steele_epsilonsf(2)
+    ...                         - Cross-interaction parameters of sigma and epsilon for 
+                                    solid-fluid interaction, instead of fluid-fluid 
+                                    interaction parameters. The read_input subroutine loop 
+                                    over all nonbonded types.
+                                  WARNING: steele_site_name should match site_type_name
+                                  specified in 'mol.in' file.
+------------------------------
+    'cg_wall'                   - Free-energy-averaged (FEA) solid-fluid potential corresonding
+                                    to the 1D surface model
+    Position [A]
+    cg_wall_position(1)         - Bottom position of the coarse-grained 1D surface in the box
+                                    (in the z-direction)
+    Initz [A]
+    cg_wall_initz               - Starting point for fluid-solid potential calculation in the box
+                                    in the z-direction; this position should correspond to the starting 
+                                    potential point in 'cg_wall.in' file
+    Resolution [A]
+    cg_wall_res                 - Resolution of the FEA potential, i.e., distance space between two 
+                                    potential data point
+------------------------------
+    'cg_wall_ffpw'              - coarse-grained fluid-solid potential with piecewise effective
+                                    fluid-fluid interaction; pre-calculated sigma values for fluid particles at certain z-position are required (eff_sig.in)
+                                    Still under development /or proved to be inefficient
+    Position [A]
+    cg_wall_position(1)         - Bottom position of the coarse-grained 1D surface in the box
+                                    (in the z-direction)
+    Initz [A]
+    cg_wall_initz               - Starting point for fluid-solid potential calculation in the box
+                                    in the z-direction; this position should correspond to the starting 
+                                    potential point in 'cg_wall.in' file
+    Resolution [A]
+    cg_wall_res                 - Resolution of the FEA potential, i.e., distance space between two 
+                                    potential data point
+    Range [A]
+    cg_ff_lob cg_ff_upb         - Cutoff distance for the piecewise fluid-fluid interaction
+------------------------------
+    'cg_wall_cos'               - Free-energy-averaged (FEA) solid-fluid potential and use Cosine function
+                                    to mimic the geometric roughness of the surface 
+                                  WARNING: still under development, double check before use
+    Position [A]
+    cg_wall_position(1)         - Bottom position of the coarse-grained 1D surface in the box
+                                    (in the z-direction)
+    Initz [A]
+    cg_wall_initz               - Starting point for fluid-solid potential calculation in the box
+                                    in the z-direction; this position should correspond to the starting 
+                                    potential point in 'cg_wall.in' file
+    Resolution [A]
+    cg_wall_res                 - Resolution of the FEA potential, i.e., distance space between two 
+                                    potential data point
+    Parameters
+    cg_wall_cosnp cg_wall_cosap - Read in periodicity and amplitude for the Cosine function
+--------------------------------
+    'cg_wall_strc'              - Area-weighted free-energy-averaged (AW-FEA) solid-fluid 
+                                    potential compatible with 2D surface model. Accessible length
+                                    La values are required in 'cg_wall_strc.in' file.
+
+    Position [A]
+    cg_wall_position(1)         - Bottom position of the coarse-grained 1D surface in the box
+                                    (in the z-direction)
+    Initz [A]
+    cg_wall_initz               - Starting point for fluid-solid potential calculation in the box
+                                    in the z-direction; this position should correspond to the starting 
+                                    potential point in 'cg_wall.in' file
+    Resolution [A]
+    cg_wall_res                 - Resolution of the FEA potential, i.e., distance space between two 
+                                    potential data point
+
+
+linit
+    .true. or .false.           - Check if needs to initialize the configuration from the scractch
+                                    if .false., read the initial config from 'initconfig.in' file
+                                    if .true., create initial configurations by initstyle
+                                  WARNING: current version can only read 'initconfig.in' file with
+                                  single atom molecules (like argon), compatible with external field and explicit external structure. 
+                                  For the use for multi-atom molecules, revision of 'initconfig.f90' is required.
+
+Initial Style
+    initstyle(1) initstyle(2) ...   - Set up initial style for each type of molecule; choices are
+                                      'coords': initial config read from 'coords.in' file; usually used for
+                                                external structure
+                                      'simple_cubic': initial config by simple cubic lattice
+                                      'random': initial configuration by randomly displacing atoms in the box
+                                      Note: 'random' style should be used with 'Relax Blocks' to avoid any bad contact between particles.
+                                      
+Inix Iniy Iniz
+    initlattice(x) initlattice(y) initlattice(z)
+                                    - Read in initial number of molecules in each dimension in the box
+                                      WARNING: The product of inix*iniy*iniz should be greater or equal to the total number of molecules in the box.
+                                      Integer format for initlattice variable
+
+Box Dimension
+    box(1) box(2) box(3)            - Box size. The origin of the box is chosen as one of the bottom 
+                                        corners of the box. So all coordinates are positive.
+
+Ewald Sum
+    .true. or .false.               - Flag to turn on/off the Ewald summation
+                                        The algorithm follows the conventional EWALD calculation
+Ewald Style
+    ewld_style                      - Read in ewald style. Only choices is
+                                      'ewald_fix_kmax': rcelect = minbox/2, alpha = kalp/minbox, kmax fixed;
+
+kalp
+    kalp                            - kalp value in the real space 
+                                        (damping parameter alpha = kalp/MINVAL(box(:,ibox)))
+kmax
+    k_max(x) k_max(y) k_max(z)      - maximum k vector for the reciprocal space. Integer.
+
+Slab Correction
+    .true. or .false.               - 2D Ewald correction for the slit shape geometry (slit pore)
+
+Spherical cut-off for ad-surf interaction
+    .true. or .false.               - spherical cut-off for adsorbate-surface interaction feature
+    rscelect                        - sherical cut-off radius [A] 
+
+Relax Blocks
+    n_blocks_relax                  - Number of blocks to relax the system before carrying out MC
+                                        algorithm following detialed balance
+
+Total Number of Blocks
+    n_blocks_tot                    - Total number of blocks for simulation (exclude relax blocks)
+
+Equilibrium Blocks
+    n_blocks_equil                  - Number of equilibrium blocks (no statistics are collected during
+                                        the equilibrium blocks)
+
+Block Size
+    block_size                      - Number of MC steps per block
+
+Probability of Selecting MC Move Types (Translation, Rotation, Transfer, Volume)
+    move_type_prob(trans) move_type_prob(rot) move_type_prob(tranfer) move_type_prob(vol)
+                                    - Probabilities of selecting different MC move types
+                                        WARNING: the last probability must be 1.0
+
+Probability of Translational Move for Each Molecule Type
+    trans_prob(mol_type1) trans_prob(mol_type2) ...
+                                    - Probability of translational move for each molecule type
+
+Probability of Rotational Move for Each Molecule Type
+    rot_prob(mol_type1) rot_prob(mol_type2) ...
+                                    - Probability of rotational move for each molecule type
+
+Probability of Transferral Move for Each Molecule Type
+    transfer_prob(mol_type1) transfer_prob(mol_type2) ...
+                                    - Probability of transfer move for each molecule type
+
+Widom Insertion
+    .true. or .false.               - Flag to turn on/off Widom insertion move
+
+Insertion Frequency for Each Molecule Type
+    widom_freq(mol_type1) widom_freq(mol_type1) ...
+                                    - Widom insertion frequency: perform one Widom insertion 
+                                        move per freq steps
+
+Sampling Options
+    'z_density'                     - Density profile of each molecule (COM) in the z-direction
+    zden_bins                       - Number of bins to produce density profile
+    z_den_freq                      - Frequency to collect density data
+------------------
+    'r_density'                     - Density profile of each molecule (COM) at a constant-R surface
+    rden_bins                       - Number of bins to produce density profile
+    rden_freq                       - Frequency to collect density data
+    rden_cut                        - Cutoff radius for density calculation 
+-----------------
+    'surface_excess'                - Surface excess amount (Gibbs surface excess)
+    surfex_bulk(mol_type1) surfex_bulk(mol_type2) ...
+                                    - bulk density [1/A^3] for each molecule type
+                                      NOTE: surfex_bulk for external structure is redundant, 
+                                      but necessary to input. 
+    surfex_area surfex_vol          - surface area [A^2] and acessible volume [A^3] used for 
+                                        surface excess calculation
+------------------
+    'virial_press_slit'             - Pressure tensor for slit geometry from virial route
+    pressdef   calc_type            - pressdef: definition of integral contour for pressure tensor calculation
+                                        Choices are:
+                                        (1) 'IK' or 'Irving-Kirkwood': only by IK 
+                                        (2) 'H' or 'Harasima': only by Harasima
+                                        (3) 'IK&H': both IK and Harasima and they are evaluated at the same time
+                                        (4) 'H-VR': Variation of the Harasima type (added on May 29, 2019)
+                                        (5) 'IK-VR': Variation of the Irving-Kirkwood type (added on May 30, 2019)
+                                        (6) 'ALL': All types of contour are evaluated at the same time (added on May 30, 2019)
+                                      calc_type: define which type of contribution to be accounted:
+                                        (1) 'fw': fluid-wall contribution
+                                        (2) 'ff': fluid-fluid contribution
+                                        (3) 'fw&ff': both fluid-fluid and fluid-wall are accounted. 
+    virialpress_slit_bins           - Number of bins for producing pressure tensor
+                                        WARNING: becuase pressure tensor calculation requires the density
+                                                    profile information, so this bin values should 
+                                                    be equal to zden_bins
+    virialpress_slit_freq           - calculation frequency
+--------------------
+    'virial_press_cylin'            - Pressure tensor for cylindrical geometry. For now only Harasima contour is 
+                                        coded. The cylindrical origin is the same as the Cartesian origin (0,0,0).
+                                        Number of bins to generate pressure tensor is consistent with 
+                                        r_density (added on Feb 27 2019)
+    pressdef                        - definition of integral contour for pressure tensor calculation
+                                        Choices are:
+                                        'H' or 'Harasima': only by Harasima (based on my derivation)                                    
+    virialpress_cylin_freq          - calculation frequency
+--------------------
+    'virial_press'                  - Pressure tensor for general planar surface. For example, lipid surface or 
+                                        simple bulk phase. (added on March 1 2019). This feature should be used together 
+                                        with 'z-density'. Number of bins is consistent with zden_bins.
+    pressdef                        - definition of integral contour for pressure tensor calculation
+                                        Choices are:
+                                        'IK' or 'Irving-Kirkwood': only by IK
+                                        'H' or 'Harasima': only by Harasima
+                                        'IK&H': both IK and Harasima and they are evaluated at the 
+                                                same time                                   
+    virialpress_freq                - calculation frequency
+----------------------
+    'lattice_const'                 - 2D lattice constant by mapping particles to the same plane
+    lattconst_n                     - Number of confined layers to be considered
+    (lattconst_cut(1,itype), itype = 1, lattconst_n)
+                                    - Lower boundary for each layer
+    (lattconst_cut(2,itype), itype = 1, lattconst_n)
+                                    - Upper boundary for each layer
+    lattconst_freq                  - calculation frequency
+---------------------
+    'isosteric_heat'                - Isosteric heat of adsorption (added on Aug 8, 2018)
+                                        WARNING: only works for single adsorbate component now!
+----------------------
+    'dump_xyz_all'                  - Dump xyz coordinates of the whole system to the file 
+                                        (Deprecated, noted on Dec 26, 2020, use 'dump_xyz_mol' instead)
+                                        (TODO: delete this option in read_input.f90)
+    dumpxyz_freq                    - Dump frequency
+------------------------
+    'dump_xyz_mol'                  - Dump xyz coordinates of selected molecule type to the file 
+                                        (added on Jan 22, 2019)
+    dumpxyz_mode                    - Two dump modes are available:
+                                        'center': dump center-of-mass of the molecule only
+                                        'sites' : dump all sites in the molecule
+    dumpxyz_freq dumpxyz_moltype    - Dump frequency and selected molecule type (if moltype = 0, it outputs 'all') to dump coordinates 
+------------------------
+    'dump_density'                  - Dump density of the whole system  (added on April 25, 2019)
+    dumpdensity_freq                - Dump frequency 
+------------------------
+    'no_pbc'                        - No periodic boundary conditions. A hard wall boundary is applied instead
+------------------------
+    'cell_list'                     - Apply cell list with linked-list algorithm to accelerate simulations
+                                        For the current version, cell list only accelerate the evaluation of the total energy,
+                                        and trial moves. Not compatible with current Ewald method (fixed kmax)
+------------------------
+    'dump_energy'                   - Dump total energy of the system in units of [J] (NOTE: units is different from my 2D code. added on Oct 13, 2019)
+    dumpenergy_freq                 - Dump frequency 
+------------------------
+    'write_restart'                 - Write the instantaneous configuration (xyz format) of the system to 'rst.xyz' file (Added on Oct 13, 2019)
+    rst_freq                        - Frequency to write the configuration which could be used as the restart file 
+                                        by changing the name to'initconfig.in'
+------------------------    
+    'dump_virial'                   - Dump hydrostatic pressure [bar], virial [J] and hydervirial [J] of the whole system, 
+                                      monoatomic version (added on Jan 10, 2020) 
+                                      Caution: the virial calculation is only for atomic fluids now for simplicity.
+    dumpvir_freq                    - Dump frequency
+-----------------------
+	'check_energy'					- Added on June 9, 2020 to recalculate and check the total energy every 'check_freq' steps
+									  to avoid propogation of errors in the accumulated total energy.
+	check_freq						- check frequency, default value: 5000.
+eof
+
+
+
+
+==========================
+4. Additional Notes
+==========================
+
+1). Sequence of molecules in the input files (input.in and mol.in) should be consistent.
+2). Random number generator generates uniform random number between [0,1)
+
+
+
