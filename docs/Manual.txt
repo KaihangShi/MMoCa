@@ -463,9 +463,9 @@ Sampling Options
                                       Caution: the virial calculation is only for atomic fluids now for simplicity.
     dumpvir_freq                    - Dump frequency
 -----------------------
-	'check_energy'					- Added on June 9, 2020 to recalculate and check the total energy every 'check_freq' steps
-									  to avoid propogation of errors in the accumulated total energy.
-	check_freq						- check frequency, default value: 5000.
+	'check_energy'		    - Added on June 9, 2020 to recalculate and check the total energy every 'check_freq' steps
+				      to avoid propogation of errors in the accumulated total energy.
+	check_freq		    - check frequency, default value: 5000.
 eof
 
 
@@ -477,6 +477,7 @@ eof
 
 1). Sequence of molecules in the input files (input.in and mol.in) should be consistent.
 2). Random number generator generates uniform random number between [0,1)
+3). Adjust n_mol_max variable in the 'global.f90' files to avoid segmentation fault or according to your own systems.
 
 
 
