@@ -39,10 +39,10 @@
 	  !================================================!
 
 	  ! Max number of molecules in each box
-	  Integer, Parameter :: n_mol_max = 800000
+	  Integer, Parameter :: n_mol_max = 100000
 
 	  ! Max number of molecule types allowed
-	  Integer, Parameter :: n_mol_types_max = 100
+	  Integer, Parameter :: n_mol_types_max = 20
 
 	  ! Number of nonbonded sites in the system (equal to Max numebr of site types allowed)
 	  Integer, Parameter :: n_nonbond_max = 100
