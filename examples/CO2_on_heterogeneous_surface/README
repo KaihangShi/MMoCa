@@ -1,0 +1,4 @@
+This example models CO2 adsorption on a heterogeneous open surface with both geometric and energetic heterogeneities.
+
+Reference:
+[1] K. Shi, E.E. Santiso, K.E. Gubbins, Conformal Sites Theory for Adsorbed Films on Energetically Heterogeneous Surfaces, Langmuir. 36 (2020) 1822–1838. https://doi.org/10.1021/acs.langmuir.9b03633.
