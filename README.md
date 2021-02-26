@@ -13,6 +13,6 @@ Compiler such as ```gfortran``` or ```ifort``` is required.
 **/docs/**. This directory contains user manual for setting up the input files and logs of program development. 
 
 ## Reference
-[1] K. Shi, E.E. Santiso, K.E. Gubbins, Can we define a unique microscopic pressure in inhomogeneous fluids?, J. Chem. Phys. 154 (2021) 084502. https://doi.org/10.1063/5.0044487.<br/>
-[2] K. Shi, E.E. Santiso, K.E. Gubbins, Conformal Sites Theory for Adsorbed Films on Energetically Heterogeneous Surfaces, Langmuir. 36 (2020) 1822–1838. https://doi.org/10.1021/acs.langmuir.9b03633.<br/>
-[3] K. Shi, E.E. Santiso, K.E. Gubbins, Bottom-Up Approach to the Coarse-Grained Surface Model: Effective Solid–Fluid Potentials for Adsorption on Heterogeneous Surfaces, Langmuir. 35 (2019) 5975–5986. https://doi.org/10.1021/acs.langmuir.9b00440.<br/>
+[1] K. Shi, E.E. Santiso, K.E. Gubbins, Can we define a unique microscopic pressure in inhomogeneous fluids?, J. Chem. Phys. 154 (2021) 084502. https://doi.org/10.1063/5.0044487. [[PDF]](http://kaihangshi.github.io/assets/docs/paper/Shi_JCP_2021.pdf)<br/>
+[2] K. Shi, E.E. Santiso, K.E. Gubbins, Conformal Sites Theory for Adsorbed Films on Energetically Heterogeneous Surfaces, Langmuir. 36 (2020) 1822–1838. https://doi.org/10.1021/acs.langmuir.9b03633. [[PDF]](http://kaihangshi.github.io/assets/docs/paper/Shi_langmuir_2020.pdf)<br/>
+[3] K. Shi, E.E. Santiso, K.E. Gubbins, Bottom-Up Approach to the Coarse-Grained Surface Model: Effective Solid–Fluid Potentials for Adsorption on Heterogeneous Surfaces, Langmuir. 35 (2019) 5975–5986. https://doi.org/10.1021/acs.langmuir.9b00440. [[PDF]](http://kaihangshi.github.io/assets/docs/paper/Shi_langmuir_2019.pdf)<br/>
