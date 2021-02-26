@@ -1,0 +1,2 @@
+  Units     Type        Average 
+kJ/mol      1            12.6016710
