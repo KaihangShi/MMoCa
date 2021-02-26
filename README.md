@@ -6,7 +6,7 @@ The source codes are in ```/src/```. To compile, simply goto the ```/src/``` dir
 
 ```make```
 
-Compilers such as ```gfortran``` or ```ifort``` are required. 
+Compiler such as ```gfortran``` or ```ifort``` is required. 
 
 ## Getting Started
 **/examples/**. This directory contains examples of short MMoCa simulations in
