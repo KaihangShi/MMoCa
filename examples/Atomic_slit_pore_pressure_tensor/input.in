@@ -1,0 +1,98 @@
+Ensemble
+uVT
+Temperature [K]
+87.3d0
+Pressure [bar]
+0.0d0
+Number of Boxes
+1
+Number of Molecule Types
+2
+Maximum Number of Sites on the Molecule
+5376
+Number of Nonbonded Types
+2
+Chemical Potential [K]
+0.0d0 -1142.202869d0
+Number of Molecules
+1 0
+Potential Form
+Lennard-Jones
+Mixing Rules
+Lorentz-Berthelot
+Tail Correction
+.false.
+r_cutoff [A]
+17.025d0
+r_min [A]
+0.1d0
+External Field
+.true.
+Field Type
+hard_slit_finitex
+Half Thickness
+10.025d0
+Averaging Region
+85.21d0 102.427d0
+linit
+.false.
+Initial Style
+coords simple_cubic 
+Inix Iniy Iniz
+10    10    10
+Box Dimension
+188.86634d0 34.080000d0 43.715d0 
+Ewald Sum
+.false.
+Ewald Style
+ewald_fix_kmax
+kalp
+5.6d0
+kmax
+7 7 7
+Slab Correction
+.false.
+Spherical cut-off for ad-surf interaction
+.false.
+10.0d0
+Relax Blocks
+0
+Total Number of Blocks
+10
+Equilibrium Blocks
+0
+Block Size
+1000
+Probability of Selecting MC Move Types (Translation, Rotation, Transfer, Volume)
+0.9d0 0.9d0 1.0d0 1.0d0
+Probability of Translational Move for Each Molecule Type
+0.0d0 1.0d0
+Probability of Rotational Move for Each Molecule Type
+0.0d0 1.0d0
+Probability of Transferral Move for Each Molecule Type
+0.0d0 1.0d0
+Widom Insertion
+.false.
+Insertion Frequency for Each Molecule Type
+0 10
+Sampling Options
+z_density
+2366
+1000
+virial_press_slit
+ALL fw&ff
+2366
+1000
+check_energy
+50000
+eof
+
+
+
+
+
+
+
+
+
+
