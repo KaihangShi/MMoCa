@@ -1,0 +1,733 @@
+=====================================================
+                                                     
+ Monte Carlo Simulation Package v2.2, by Kaihang Shi
+ Department of Chemical & Biomolecular Engineering
+ North Carolina State University, Raleigh, NC, USA
+ Created on Dec. 4th, 2016
+ Last modified in June 2020
+                                                     
+ ====================================================
+Random number seed: -15600
+Ensemble: uVT
+Temperature [K]:   87.30
+Number of boxes: 1
+Number of molecule types: 1
+Maximum number of sites on a molecule: 1
+Molecule Type: 1  Chemical Potential [K]:   -1679.4216490
+Total number of molecules in box 1: 10
+Mixing rules: Lorentz-Berthelot
+r_cutoff:  17.025
+r_min:   0.100
+ 10-4-3 Steele potential for slit pore geometry is used...
+Cutoff:  60.000
+Delta:   3.350
+Rho_s:   0.114
+Box 1 Dimensions:   70.000     70.000    200.000
+Number of nonbonded types: 1
+No.          Molecule
+1            Ar    
+No.          Site
+1            Ar    
+  
+ Potential form: Lennard-Jones
+ Mixing rules: Lorentz-Berthelot
+ No.  Atom(i)   No.  Atom(j)         sigma[A]           epsilon[K]         charg
+ e[e]
+ 1   Ar         1   Ar                 3.4050           119.8000             0.0000
+Position for Downside Wall:  20.000
+Position for Upper Wall: 180.000
+ Initialize 10-4-3 Steele potential interaction parameters:
+Ar              3.402           57.917
+Initial volume of the box 1 is:          980000.0000
+Initial pore volume of the box 1 is:          784000.0000
+ !--- Warning: pore volume should be equal to the total system volume in NON-sli
+ t-like pore. ---!
+Initializing molecule Ar     in box 1 using simple cubic lattice structure
+ Initialization of configurations is completed.
+Box 1 has been successfully wrapped
+kmax for box 1: 7   7   7
+Initial Alpha in Ewald Sum:      0.000
+Initial rcelect:      0.000
+Number of relax blocks: 0
+Total number of simulation blocks: 30
+Number of equilibrium blocks: 20
+Block size: 100000
+Cell list will be applied to accelerate simulations!
+Initial number of cells in x, y, z-direction:   4     4    11
+Initial size of cells in x, y, z-direction: 17.50   17.50   18.18
+Probabilities of selecting translational move: 0.900
+Probabilities of selecting rotational move: 0.000
+Probabilities of selecting transfer move: 0.100
+Probabilities of selecting volume move: 0.000
+ Starting Simulation ...
+* Steps: 100000 * 
+Block Average for Block 1
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.8448303E+04 [J/mol]     -0.4047641E+05 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:     39.835
+Number Density:   0.4064813E-04[A^-3]    0.2696402E-02[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89494  Accepted: 44724  Accepted Ratio:  49.974 %
+Max Displacement:  28.22
+  Insertion Move 
+Attempted: 4870  Accepted: 119  Accepted Ratio:   2.444 %
+  Deletion Move 
+Attempted: 4929  Accepted: 64  Accepted Ratio:   1.298 %
+* Steps: 200000 * 
+Block Average for Block 2
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9109289E+04 [J/mol]     -0.1083184E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:     98.867
+Number Density:   0.1008848E-03[A^-3]    0.6692214E-02[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90096  Accepted: 45003  Accepted Ratio:  49.950 %
+Max Displacement:   0.21
+  Insertion Move 
+Attempted: 9810  Accepted: 224  Accepted Ratio:   2.283 %
+  Deletion Move 
+Attempted: 9893  Accepted: 111  Accepted Ratio:   1.122 %
+* Steps: 300000 * 
+Block Average for Block 3
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9296522E+04 [J/mol]     -0.1669325E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    149.298
+Number Density:   0.1523451E-03[A^-3]    0.1010584E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90005  Accepted: 44840  Accepted Ratio:  49.819 %
+Max Displacement:   0.84
+  Insertion Move 
+Attempted: 14801  Accepted: 306  Accepted Ratio:   2.067 %
+  Deletion Move 
+Attempted: 14897  Accepted: 145  Accepted Ratio:   0.973 %
+* Steps: 400000 * 
+Block Average for Block 4
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9432042E+04 [J/mol]     -0.2008296E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    177.034
+Number Density:   0.1806467E-03[A^-3]    0.1198324E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90069  Accepted: 45230  Accepted Ratio:  50.217 %
+Max Displacement:   0.23
+  Insertion Move 
+Attempted: 19719  Accepted: 365  Accepted Ratio:   1.851 %
+  Deletion Move 
+Attempted: 19910  Accepted: 184  Accepted Ratio:   0.924 %
+* Steps: 500000 * 
+Block Average for Block 5
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9469822E+04 [J/mol]     -0.2209600E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    194.002
+Number Density:   0.1979611E-03[A^-3]    0.1313179E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90123  Accepted: 44915  Accepted Ratio:  49.837 %
+Max Displacement:   0.06
+  Insertion Move 
+Attempted: 24652  Accepted: 425  Accepted Ratio:   1.724 %
+  Deletion Move 
+Attempted: 24854  Accepted: 227  Accepted Ratio:   0.913 %
+* Steps: 600000 * 
+Block Average for Block 6
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9565360E+04 [J/mol]     -0.2404771E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    209.029
+Number Density:   0.2132949E-03[A^-3]    0.1414896E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89854  Accepted: 45177  Accepted Ratio:  50.278 %
+Max Displacement:   0.68
+  Insertion Move 
+Attempted: 29797  Accepted: 484  Accepted Ratio:   1.624 %
+  Deletion Move 
+Attempted: 29855  Accepted: 279  Accepted Ratio:   0.935 %
+* Steps: 700000 * 
+Block Average for Block 7
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9569588E+04 [J/mol]     -0.2701760E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    234.740
+Number Density:   0.2395309E-03[A^-3]    0.1588933E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89889  Accepted: 45035  Accepted Ratio:  50.101 %
+Max Displacement:   0.03
+  Insertion Move 
+Attempted: 34777  Accepted: 557  Accepted Ratio:   1.602 %
+  Deletion Move 
+Attempted: 34986  Accepted: 317  Accepted Ratio:   0.906 %
+* Steps: 800000 * 
+Block Average for Block 8
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9665795E+04 [J/mol]     -0.3039661E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    261.470
+Number Density:   0.2668061E-03[A^-3]    0.1769864E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89914  Accepted: 44963  Accepted Ratio:  50.007 %
+Max Displacement:   1.49
+  Insertion Move 
+Attempted: 39678  Accepted: 619  Accepted Ratio:   1.560 %
+  Deletion Move 
+Attempted: 40171  Accepted: 361  Accepted Ratio:   0.899 %
+* Steps: 900000 * 
+Block Average for Block 9
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9726794E+04 [J/mol]     -0.3260971E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    278.748
+Number Density:   0.2844365E-03[A^-3]    0.1886815E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89984  Accepted: 45080  Accepted Ratio:  50.098 %
+Max Displacement:   0.81
+  Insertion Move 
+Attempted: 44672  Accepted: 667  Accepted Ratio:   1.493 %
+  Deletion Move 
+Attempted: 45193  Accepted: 389  Accepted Ratio:   0.861 %
+* Steps: 1000000 * 
+Block Average for Block 10
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9781445E+04 [J/mol]     -0.3458546E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    293.985
+Number Density:   0.2999844E-03[A^-3]    0.1989953E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90071  Accepted: 45062  Accepted Ratio:  50.029 %
+Max Displacement:   1.48
+  Insertion Move 
+Attempted: 49588  Accepted: 714  Accepted Ratio:   1.440 %
+  Deletion Move 
+Attempted: 50206  Accepted: 426  Accepted Ratio:   0.849 %
+* Steps: 1100000 * 
+Block Average for Block 11
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9800326E+04 [J/mol]     -0.3556735E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    301.749
+Number Density:   0.3079067E-03[A^-3]    0.2042505E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89854  Accepted: 44708  Accepted Ratio:  49.756 %
+Max Displacement:   0.24
+  Insertion Move 
+Attempted: 54690  Accepted: 757  Accepted Ratio:   1.384 %
+  Deletion Move 
+Attempted: 55250  Accepted: 461  Accepted Ratio:   0.834 %
+* Steps: 1200000 * 
+Block Average for Block 12
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9838637E+04 [J/mol]     -0.3699412E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    312.631
+Number Density:   0.3190111E-03[A^-3]    0.2116167E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89929  Accepted: 44906  Accepted Ratio:  49.935 %
+Max Displacement:   0.20
+  Insertion Move 
+Attempted: 59712  Accepted: 798  Accepted Ratio:   1.336 %
+  Deletion Move 
+Attempted: 60299  Accepted: 489  Accepted Ratio:   0.811 %
+* Steps: 1300000 * 
+Block Average for Block 13
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9877112E+04 [J/mol]     -0.3832142E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    322.586
+Number Density:   0.3291696E-03[A^-3]    0.2183553E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90174  Accepted: 45046  Accepted Ratio:  49.955 %
+Max Displacement:   0.88
+  Insertion Move 
+Attempted: 64736  Accepted: 837  Accepted Ratio:   1.293 %
+  Deletion Move 
+Attempted: 65101  Accepted: 523  Accepted Ratio:   0.803 %
+* Steps: 1400000 * 
+Block Average for Block 14
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9903918E+04 [J/mol]     -0.3989614E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    334.933
+Number Density:   0.3417684E-03[A^-3]    0.2267128E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90053  Accepted: 44980  Accepted Ratio:  49.948 %
+Max Displacement:   0.04
+  Insertion Move 
+Attempted: 69838  Accepted: 869  Accepted Ratio:   1.244 %
+  Deletion Move 
+Attempted: 69946  Accepted: 540  Accepted Ratio:   0.772 %
+* Steps: 1500000 * 
+Block Average for Block 15
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9916078E+04 [J/mol]     -0.4133804E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    346.612
+Number Density:   0.3536862E-03[A^-3]    0.2346184E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90035  Accepted: 44997  Accepted Ratio:  49.977 %
+Max Displacement:   0.01
+  Insertion Move 
+Attempted: 74864  Accepted: 899  Accepted Ratio:   1.201 %
+  Deletion Move 
+Attempted: 74885  Accepted: 559  Accepted Ratio:   0.746 %
+* Steps: 1600000 * 
+Block Average for Block 16
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9960269E+04 [J/mol]     -0.4254049E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    355.112
+Number Density:   0.3623594E-03[A^-3]    0.2403718E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90016  Accepted: 45105  Accepted Ratio:  50.108 %
+Max Displacement:   2.14
+  Insertion Move 
+Attempted: 79787  Accepted: 943  Accepted Ratio:   1.182 %
+  Deletion Move 
+Attempted: 79946  Accepted: 584  Accepted Ratio:   0.730 %
+* Steps: 1700000 * 
+Block Average for Block 17
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.9997622E+04 [J/mol]     -0.4499506E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    374.199
+Number Density:   0.3818354E-03[A^-3]    0.2532913E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90034  Accepted: 45116  Accepted Ratio:  50.110 %
+Max Displacement:   0.64
+  Insertion Move 
+Attempted: 84734  Accepted: 972  Accepted Ratio:   1.147 %
+  Deletion Move 
+Attempted: 84965  Accepted: 601  Accepted Ratio:   0.707 %
+* Steps: 1800000 * 
+Block Average for Block 18
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1005398E+05 [J/mol]     -0.4678343E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    386.891
+Number Density:   0.3947864E-03[A^-3]    0.2618824E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89955  Accepted: 44944  Accepted Ratio:  49.963 %
+Max Displacement:   0.13
+  Insertion Move 
+Attempted: 89828  Accepted: 1003  Accepted Ratio:   1.117 %
+  Deletion Move 
+Attempted: 89916  Accepted: 626  Accepted Ratio:   0.696 %
+* Steps: 1900000 * 
+Block Average for Block 19
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1002968E+05 [J/mol]     -0.4762398E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    394.796
+Number Density:   0.4028532E-03[A^-3]    0.2672335E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89897  Accepted: 44897  Accepted Ratio:  49.943 %
+Max Displacement:   8.54
+  Insertion Move 
+Attempted: 94817  Accepted: 1044  Accepted Ratio:   1.101 %
+  Deletion Move 
+Attempted: 95030  Accepted: 651  Accepted Ratio:   0.685 %
+* Steps: 2000000 * 
+Block Average for Block 20
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1013354E+05 [J/mol]     -0.4995591E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    409.883
+Number Density:   0.4182477E-03[A^-3]    0.2774455E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89839  Accepted: 45306  Accepted Ratio:  50.430 %
+Max Displacement:   0.24
+  Insertion Move 
+Attempted: 99931  Accepted: 1070  Accepted Ratio:   1.071 %
+  Deletion Move 
+Attempted: 100077  Accepted: 664  Accepted Ratio:   0.663 %
+* Steps: 2100000 * 
+Block Average for Block 21
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1013469E+05 [J/mol]     -0.5083424E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    417.042
+Number Density:   0.4255534E-03[A^-3]    0.2822917E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89868  Accepted: 44933  Accepted Ratio:  49.999 %
+Max Displacement:   0.66
+  Insertion Move 
+Attempted: 104968  Accepted: 1096  Accepted Ratio:   1.044 %
+  Deletion Move 
+Attempted: 105172  Accepted: 688  Accepted Ratio:   0.654 %
+* Steps: 2200000 * 
+Block Average for Block 22
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1017861E+05 [J/mol]     -0.5196298E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    424.463
+Number Density:   0.4331255E-03[A^-3]    0.2873147E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89878  Accepted: 45140  Accepted Ratio:  50.224 %
+Max Displacement:   1.20
+  Insertion Move 
+Attempted: 110084  Accepted: 1124  Accepted Ratio:   1.021 %
+  Deletion Move 
+Attempted: 110178  Accepted: 708  Accepted Ratio:   0.643 %
+* Steps: 2300000 * 
+Block Average for Block 23
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1015759E+05 [J/mol]     -0.5251352E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    429.848
+Number Density:   0.4386201E-03[A^-3]    0.2909596E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90063  Accepted: 45105  Accepted Ratio:  50.082 %
+Max Displacement:   0.18
+  Insertion Move 
+Attempted: 115064  Accepted: 1152  Accepted Ratio:   1.001 %
+  Deletion Move 
+Attempted: 115135  Accepted: 729  Accepted Ratio:   0.633 %
+* Steps: 2400000 * 
+Block Average for Block 24
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1022066E+05 [J/mol]     -0.5394890E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    438.872
+Number Density:   0.4478285E-03[A^-3]    0.2970680E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89950  Accepted: 45017  Accepted Ratio:  50.047 %
+Max Displacement:   0.07
+  Insertion Move 
+Attempted: 120046  Accepted: 1176  Accepted Ratio:   0.980 %
+  Deletion Move 
+Attempted: 120203  Accepted: 745  Accepted Ratio:   0.620 %
+* Steps: 2500000 * 
+Block Average for Block 25
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1026404E+05 [J/mol]     -0.5523807E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    447.460
+Number Density:   0.4565918E-03[A^-3]    0.3028811E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89794  Accepted: 44899  Accepted Ratio:  50.002 %
+Max Displacement:   0.26
+  Insertion Move 
+Attempted: 125166  Accepted: 1204  Accepted Ratio:   0.962 %
+  Deletion Move 
+Attempted: 125289  Accepted: 757  Accepted Ratio:   0.604 %
+* Steps: 2600000 * 
+Block Average for Block 26
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1026844E+05 [J/mol]     -0.5652671E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    457.703
+Number Density:   0.4670435E-03[A^-3]    0.3098143E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90108  Accepted: 45097  Accepted Ratio:  50.048 %
+Max Displacement:   0.14
+  Insertion Move 
+Attempted: 130197  Accepted: 1226  Accepted Ratio:   0.942 %
+  Deletion Move 
+Attempted: 130150  Accepted: 779  Accepted Ratio:   0.599 %
+* Steps: 2700000 * 
+Block Average for Block 27
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1030278E+05 [J/mol]     -0.5751795E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    464.176
+Number Density:   0.4736492E-03[A^-3]    0.3141962E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90095  Accepted: 44883  Accepted Ratio:  49.817 %
+Max Displacement:   0.21
+  Insertion Move 
+Attempted: 135193  Accepted: 1246  Accepted Ratio:   0.922 %
+  Deletion Move 
+Attempted: 135059  Accepted: 792  Accepted Ratio:   0.586 %
+* Steps: 2800000 * 
+Block Average for Block 28
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1029905E+05 [J/mol]     -0.5718475E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    461.655
+Number Density:   0.4710761E-03[A^-3]    0.3124893E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89814  Accepted: 44877  Accepted Ratio:  49.967 %
+Max Displacement:   0.21
+  Insertion Move 
+Attempted: 140256  Accepted: 1254  Accepted Ratio:   0.894 %
+  Deletion Move 
+Attempted: 140182  Accepted: 805  Accepted Ratio:   0.574 %
+* Steps: 2900000 * 
+Block Average for Block 29
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1032537E+05 [J/mol]     -0.5747254E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    462.795
+Number Density:   0.4722403E-03[A^-3]    0.3132616E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 90042  Accepted: 45033  Accepted Ratio:  50.013 %
+Max Displacement:   0.19
+  Insertion Move 
+Attempted: 145169  Accepted: 1276  Accepted Ratio:   0.879 %
+  Deletion Move 
+Attempted: 145227  Accepted: 821  Accepted Ratio:   0.565 %
+* Steps: 3000000 * 
+Block Average for Block 30
+Box: 1
+Box Length:   70.000    70.000   200.000
+Box Volume:          980000.0000
+Pore Volume:          784000.0000
+Total Energy:  -0.1031886E+05 [J/mol]     -0.5794277E+06 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:    466.876
+Number Density:   0.4764042E-03[A^-3]    0.3160237E-01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89908  Accepted: 45008  Accepted Ratio:  50.060 %
+Max Displacement:   0.52
+  Insertion Move 
+Attempted: 150238  Accepted: 1296  Accepted Ratio:   0.863 %
+  Deletion Move 
+Attempted: 150250  Accepted: 839  Accepted Ratio:   0.558 %
+ 
+ +++++ End of Markov Chain +++++
+ 
+ 
+Final Energy for Box: 1
+Total Energy                        -0.5810260E+06 [K] 
+Inter vdW                           -0.9089183E+05 [K] 
+vdW Tail Correction                  0.0000000E+00 [K] 
+Total Coulomb                        0.0000000E+00 [K] 
+   Real Space (Inter-molecular)      0.0000000E+00 [K] 
+   Fourier Space                     0.0000000E+00 [K] 
+   Self Correction                   0.0000000E+00 [K] 
+   Intra-molecular                   0.0000000E+00 [K] 
+   Slab Correction                   0.0000000E+00 [K] 
+External Field                      -0.4901342E+06 [K] 
+ 
+Block Averages for Equilibrium Stage (20 blocks)
+                    Units     Type    Box     Average           Standard Deviati
+ on
+Total energy        J/mol              1      -0.9678806E+04     0.3850409E+03
+                      K                1      -0.3187519E+06     0.1268054E+05
+Molecule Number                 1      1        273.820          0.9980623E+02
+Number Density      A^-3        1      1       0.2794081E-03     0.1018431E-03
+Density             g/ml        1      1       0.1853460E-01     0.6755783E-02
+ 
+Block Averages for Production Stage (10 blocks)
+                    Units     Type    Box     Average           Standard Deviati
+ on
+Total energy        J/mol              1      -0.1024701E+05     0.6622387E+02
+                      K                1      -0.5510068E+06     0.3561020E+04
+Molecule Number                 1      1        447.089          0.1742029E+02
+Number Density      A^-3        1      1       0.4562132E-03     0.1777580E-04
+Density             g/ml        1      1       0.3026300E-01     0.1179161E-02
+Mu                   K          1      1           0.0000000     0.0000000E+00
+ 
+ ---------- Block Averages ----------
+Box: 1
+ Block    Energy[J/mol]           Mol Number
+    1     -0.8448303E+04          39.835
+    2     -0.9109289E+04          98.867
+    3     -0.9296522E+04         149.298
+    4     -0.9432042E+04         177.034
+    5     -0.9469822E+04         194.002
+    6     -0.9565360E+04         209.029
+    7     -0.9569588E+04         234.740
+    8     -0.9665795E+04         261.470
+    9     -0.9726794E+04         278.748
+   10     -0.9781445E+04         293.985
+   11     -0.9800326E+04         301.749
+   12     -0.9838637E+04         312.631
+   13     -0.9877112E+04         322.586
+   14     -0.9903918E+04         334.933
+   15     -0.9916078E+04         346.612
+   16     -0.9960269E+04         355.112
+   17     -0.9997622E+04         374.199
+   18     -0.1005398E+05         386.891
+   19     -0.1002968E+05         394.796
+   20     -0.1013354E+05         409.883
+   21     -0.1013469E+05         417.042
+   22     -0.1017861E+05         424.463
+   23     -0.1015759E+05         429.848
+   24     -0.1022066E+05         438.872
+   25     -0.1026404E+05         447.460
+   26     -0.1026844E+05         457.703
+   27     -0.1030278E+05         464.176
+   28     -0.1029905E+05         461.655
+   29     -0.1032537E+05         462.795
+   30     -0.1031886E+05         466.876
+  
+Total CPU TIME:   0.6884132E+02 s       0.02 hrs
+Date: 21:59    2/25/2021
