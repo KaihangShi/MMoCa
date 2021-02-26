@@ -1,2 +1,0 @@
-  Units     Type        Average          Standard Deviation
-mmol/m^2    2            -0.0011055     0.9912634E-04
