@@ -3,7 +3,9 @@ MMoCa is a Multi-purpose Monte Carlo simulation package for molecular systems. I
 
 ## Requirement and Installation 
 The source codes are in ```/src/```. To compile, simply goto the ```/src/``` directory and hit
+
 ```make```
+
 Compilers such as ```gfortran``` or ```ifort``` are required. 
 
 ## Getting Started
