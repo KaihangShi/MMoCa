@@ -1,4 +1,4 @@
-This example models Ar adsorption on geometrically heterogeneous carbon surface at 87.3 K using the 2D area-weighted free-energy-averaged (AW-FEA) potential.
+This example models Ar adsorption on a 2D coarse-grained surface where the 2D area-weighted free-energy-averaged (AW-FEA) potential is obtained from the atomistically heterogeneous surface.
 
 Reference:
 [1] K. Shi, E.E. Santiso, K.E. Gubbins, Bottom-Up Approach to the Coarse-Grained Surface Model: Effective Solid–Fluid Potentials for Adsorption on Heterogeneous Surfaces, Langmuir. 35 (2019) 5975–5986. https://doi.org/10.1021/acs.langmuir.9b00440.
