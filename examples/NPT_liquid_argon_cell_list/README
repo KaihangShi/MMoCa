@@ -1,4 +1,0 @@
-This example uses cell list to accelerate the NPT simulation of 8,000 argon molecules. Energies and virials are dumped for fluctuation calculations.
-
-Reference:
-[1] D. Frenkel, B. Smit, Understanding molecular simulation: from algorithms to applications, 2nd ed., San Diego: Academic Press, 2002.
