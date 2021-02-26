@@ -14,7 +14,5 @@ Compiler such as ```gfortran``` or ```ifort``` is required.
 
 ## Reference
 [1] K. Shi, E.E. Santiso, K.E. Gubbins, Can we define a unique microscopic pressure in inhomogeneous fluids?, J. Chem. Phys. 154 (2021) 084502. https://doi.org/10.1063/5.0044487.<br/>
-[2] K. Shi, Molecular Simulation and Theoretical Studies of Adsorption on Heterogeneous Surfaces and Microscopic Pressure Tensor in Thin Adsorbed Films, North Carolina State University, 2020.<br/>
-[3] K. Shi, Y. Shen, E.E. Santiso, K.E. Gubbins, Microscopic Pressure Tensor in Cylindrical Geometry: Pressure of Water in a Carbon Nanotube, J. Chem. Theory Comput. 16 (2020) 5548–5561. https://doi.org/10.1021/acs.jctc.0c00607.<br/>
-[4] K. Shi, E.E. Santiso, K.E. Gubbins, Conformal Sites Theory for Adsorbed Films on Energetically Heterogeneous Surfaces, Langmuir. 36 (2020) 1822–1838. https://doi.org/10.1021/acs.langmuir.9b03633.<br/>
-[5] K. Shi, E.E. Santiso, K.E. Gubbins, Bottom-Up Approach to the Coarse-Grained Surface Model: Effective Solid–Fluid Potentials for Adsorption on Heterogeneous Surfaces, Langmuir. 35 (2019) 5975–5986. https://doi.org/10.1021/acs.langmuir.9b00440.<br/>
+[2] K. Shi, E.E. Santiso, K.E. Gubbins, Conformal Sites Theory for Adsorbed Films on Energetically Heterogeneous Surfaces, Langmuir. 36 (2020) 1822–1838. https://doi.org/10.1021/acs.langmuir.9b03633.<br/>
+[3] K. Shi, E.E. Santiso, K.E. Gubbins, Bottom-Up Approach to the Coarse-Grained Surface Model: Effective Solid–Fluid Potentials for Adsorption on Heterogeneous Surfaces, Langmuir. 35 (2019) 5975–5986. https://doi.org/10.1021/acs.langmuir.9b00440.<br/>
