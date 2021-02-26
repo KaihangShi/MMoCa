@@ -1,0 +1,4 @@
+This example uses cell list technique to accelerate the NPT simulation with 8,000 argon molecules.
+
+Reference:
+[1] D. Frenkel, B. Smit, Understanding molecular simulation: from algorithms to applications, 2nd ed., San Diego: Academic Press, 2002.
