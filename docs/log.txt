@@ -1,0 +1,842 @@
+------------------------------------------------------------------------------------------------------------------------------------------
+Programming Log
+------------------------------------------------------------------------------------------------------------------------------------------
+v2.2 
+6-9-2020
+	1. This version abandoned the 'extended region' in the pressure tensor calculation as used by Yun Long. 
+		Now, you can set the size of the averaging region freely (ONLY for the field type of 'HARD_SLIT_FINITEX').
+		The contribution in the averaging region by each contour definition has been corrected to reflect the change.
+
+		IMPORTANT NOTE: The size of the averaging region should match the lattice structure of the graphene surface, otherwise, some local 
+						Pn near the wall cannot be correctly sampled. (noted on June 24, 2020)
+
+	2. Add an sampling option 'check_energy', it dictates the program to recalculate and check the total energy of the system to mitigate
+		the error in the accumulated (rolling) energy. This follows the 'check_energy' subroutine ('rolling energy check') in DL_MONTE-2.
+
+		Although translation, rotate etc. moves only depend on the energy change, the volume change move and isosteric heat calculations are 
+		dependent on the total energy. IF there are propogated errors in the accumulated total energies, the final results will be questionable.
+
+
+
+
+
+
+v2.2b
+5-3-2020
+	1. Modifed the Harasima and H-VR method to calculate the local tangential pressure in the slit pore. The original method is slit half-half for 
+		particles inside and outside the averaging region. Derivation and integrating results (including fw contribution) show this split is not correct. 
+		I revised the press_virial_slit.f90 code to reflect the correct assignment by introducing 'fac_x'. 
+		
+
+4-29-2020
+	1. Adjust the calculation range of zdensity and press_virial_slit. Now both will include the solid substrate region and the fluid-wall contribution
+		to the local pressure can be fully covered.
+
+v2.1
+1-10-2020
+	1. Added 'dump_virial' functions. This command will calculate instant virial [J], hypervirial [J] and hydrostatic pressure [bar] of the system everytime when energy is calculated and dump to the file 'virial.txt'.
+
+    Test system: liquid Ar, 90 K, 50 bar, N=4537, V=60*60*60, rho = 1.3934 g/ml , Cv=21.278 J/(mol*K), Cp=43.957 J/(mol*K) (Data from NIST website)
+    (2nd NIST source: https://wtt-pro.nist.gov/wtt-pro/index.html?cmp=argon#argon;06;4g;1g;7g;3g;52;5g;55;Hg;8g;8b;8f;8a;Kf;Ka;Lf,83.8058,150.69,3,1,1000000,50000;La;Nf;Na;Ea;Fa;O6;Qg;Q2;Tg;Rf;Ra;Re;Ye;Mf;Ma;Xf;Wa;eg;ea;ef;eb;hg;mg;ja;jf;jg;na;nf;ng/a;39,69/)
+
+	Test: 1) NVT: 
+             1. Small system (30*30*30), liquid argon, rcut=15 (not long enough to reproduce correct virial), w/o cell list
+                Cv = 8.5 (config) + 12.47 (kinetic) = 20.97 J/(mol*K)  ~~ 21.278 (NIST)   --------- PASSED
+                V*gamma_V = 5.31487E-20 J/K; gamma_V = 1968.47 kPa/K  ~~~~~ 2057 kPa/K (NIST)
+                beta_T/V = 6.0436E16 1/J; beta_T = 1.631772E-6 1/kPa
+                Cp = 20.97 + 16.3185 = 37.28 J/molK ~~~ 43.957 (NIST)  ----------- Very close
+
+             2. Large system (60*60*60), liquid argon, rcut=20, with cell_list. 
+                Cv = 8.858 (config) + 12.47 (kinetic) = 21.328 J/(mol*K)  ~~ 21.278 (NIST)   --------- PASSED
+                V*gamma_V = 4.4806E-19 J/K; gmma_V = 2074.35 kPa/K ---------- PASSED 
+                beta_T/V = 8.89E15 1/J; beta_T = 1.92024E-6 1/kPa  ~~~~ 2.078E-6 1/kPa (NIST) -------- PASSED
+                Cp = 21.328 +  21.32 = 42.648 J/molK ~~~ 43.957 (NIST)  ----------- Very close; PASSED
+                Thermal expansion coefficient: alpha_p = beta_T*gamma_V = 0.0039832534 1/K
+                Joule-Thomson coefficient: mu_T = -1.95K/kPa (no NIST comparison)
+                
+
+          2) NPT: 
+             1. Small system. rcut = 15, N=1000, p = 50 bar, no cell_list. The calculated total pressure is almost equal to 50 bar, but with a small upshift due to small cut off radius.
+
+             2. Large system. rcut=20, N=5000, T= 90 K, P=10 bar, NIST density = 1.3813 g/ml, with cell_list. Calculated pressure is PERFECTLY aligned with preset pressure (PASSED).
+                Cv = 
+
+          3) uVT: 
+             1. Small system. V=100^3. no cell_list. The calculated pressure is PERFECTLY equal to 1 bar (specified). ---- PASSED
+             2. Large system. V=300^3. with cell_list. ------------ PASSED
+
+			
+
+
+
+v2.0
+10-14-2019
+	1. Added 'random' initial configuraiton style. 
+
+
+10-13-2019
+	1. Added 'dump_energy' functions. This command will dump instantaneous total energy of the system to file in units of [J].
+	2. Added 'write_restart' function. This command will print instantaneous XYZ coordinates of the system to 'rst.xyz' file which could be used as the initial configuraiton for the next simulation by changing the name to 'initconfig.in'.
+
+
+
+7-15-2019
+	1. Added "cell list" to accelerate the dispersion interactions in the simulation. Cell list is scaled by N, should be faster than verlet list.
+	cell list is a sampling option:
+		'cell_list'
+
+	- By default, cell list is updated once a move is accepted, the orignial size of the cell is r_cut, but will be 
+		adjusted to accomodate the simulation box size. 
+	- In the current version, cell list will accelerate the evaluation of the total energy, translate, rotate, volume change and insert/
+		remove moves. 
+	- Cell list is not compatible with current Ewald summation calculations (fixed kmax). I need to use fixed r_cut algorithm for Ewald with cell list OR 
+			use cell list only for LJ interactions and separate the subroutines that evaluate LJ interactions and real-space Coulombic interactions.
+
+
+	Updated following files:
+	mc.f90, read_input, global, global_allocate, initialize, eng_total, translate, volchange_npt, insert, remove, rotate
+	 	and any possible subroutines involving particle moves, volume moves and energy/force calculations (e.g., widom insertion, virial ...)
+	new subroutine:
+	set_clist: setup basic cell list parameters and assign cell neighbors
+	update_clist: build the cell list using linked-list algorithm (see Frenkel & Smit book)
+	eng_mol_clist: using cell list method to calculate intermolecular energy of imol
+	eng_ij_clist: calculate imol's energy with surrounding adsorbate molecules/substrate sites
+
+
+	TEST: 1. NVT SPCE water test (Ewald without cell list): PASSED
+			 NVT pure argon test (cell list): PASSED, about 300 times speed up
+			 isosteric heat (v1.6.1) test (uVT & steele potential & cell list): 4 times speed up. PASSED. need long simulation time
+			 NPT widom test water @ 400K, 0.7 bar: mu = -6412 K (towhee), -6418K (v2.0), -6418 K (other version). PASSED
+			 NPT widom test argon: @ 87.3 K, P = 0.7 bar, density = 0.3944E-2 g/ml (NIST). <rho> = 0.3926E-2 g/ml (cell_list, rc=17A). PASSED
+			 uVT with atomistic solid (with cell list):
+			 	1). CO2, no Ewald: total adsorbed number = 494.8 +- 11 (steele model, 12 times speed up), 501.7 +- 12 (steele, no cell list), 489 +- 13 (atomic graphite) PASSED.
+			 	2). argon:  adsorbed amount = 0.05207 1/A^2 (steele model, 4 times speed up), amount = 0.05322 1/A^2 (atomic graphite) PASSED
+
+
+7-14-2019
+	1. Added sampling option 'no_pbc' to simulate a hard wall boundary condition.
+		NOTE: NO_PBC option is not working for many current subroutine, for example, tail correction, ewald, virial calculation ...
+
+
+
+
+
+v1.9
+6-14-2019
+	1. Modified 'dump_xyz_mol' option. Added option 'center', 'site' to control the output xyz coordinates of selected molecule type.
+
+
+5-30-2019
+	1. Add one new integral contour (IK-VR1) to calculate the local tangential pressure for slit pore system, defined as the contour from (x1,y1,z1)
+		to (x1,y1,(z1+2z2)/3), then to (x2,y2,z2). See derivation in the document.
+
+	2. Add an option to sampling command 'press_virial_slit' to calculate fluid-wall (fw), fluid-fluid (ff) or all contributions (all)
+	3. Rename the output file for pressure tensor, see 'MC_User_Guide.txt' for more information. 
+
+
+	!!!!! I have changed extended region 10.215 to 13.62 to see if such value has effect on the delta_z, change back to 10.215 if no effect.
+
+
+5-29-2019
+	1. Add one new integral contour (H-VR1) to calculate the local tangential pressure for slit pore system, defined as the contour from (x1,y1,z1)
+		to (x1,y1,(z1+z2)/2), then to (x2,y2,(z1+z2)/2) and eventually to (x2,y2,z2).  
+		! Note: Only 1/2 of the tangential pressure is contributed if one of the atoms in the pair is in the averaging region.
+	
+
+
+v1.8
+
+4-25-2019
+	1. Add a new sampling option 'dump_density' to output density of the system at a specified interval. (for calculating the thermodynamic 
+	properties related to the fluctuations of the system density, e.g. heat capacity)
+		format: 'dump_density'
+				dumpdensity_freq
+
+
+3-11-2019
+	1. Add a new subroutine 'press_virial_cylin' to calculate the pressure tensor in the cylindrical system with a 
+		Harasima-like contour. ONLY WORKS FOR BULK FLUID NOW (and for current version, no impulsive term was added). PBC only applied in z-direction.
+		Modified subroutine 'initialize.f90'     'sample.f90', 'mc.f90', 'global.f90', 'global_allocate.f90'
+	2. Add a new sampling option 'r_density' to calculate the density profile in a cylindrical system with calculation cut-off rden_cut.
+	3. Add a new 'virial_press' option for pressure tensor calculation of a general planar surface. Examples are bulk 
+		phase and planar vapor-liquid interface. TEST: 140K, 50bar bulk liquid argon, gives average PT(IK)=PN=PT(H)=50bar but with impulsive contribution (post-process)
+
+
+
+v1.7
+2-19-2019
+	1. Add some codes in initconfig.f90 to wrap all atoms into the simulation box before simulation starts.
+	   This is particularly for reading output structure generated by other program (e.g., NAMD, AMBER etc.)
+	   Now, the code works for multi-component/multi-adsorbate wrapping.
+
+
+
+1-22-2019
+	1. Add 'dump_xyz_mol' sampling option to output xyz coordinates for specified molecule type.
+		format: 'dump_xyz_mol' 
+				 dump_freq  dump_moltype  
+				
+
+11-21-2018
+	1. Add 'dump_xyz_all' sampling option to output xyz coordinates of the whole system for post-process.
+		format: 'dump_xyz_all'   ----label
+				 dump_freq       ----frequency to dump coordinates (integer)
+
+	2. Corrected the 'lattice_const' calculation. Previous version calculates the distance involing x, y and z. 
+		If we assume a 2D layer, the lattice constant should only involve projected coordinates of x and y.
+
+
+v1.6.1
+8-10-2018
+	1. Add 'isosteric_heat' sampling option to calculate the isosteric heat of adsorption. The calculation ONLY works for 
+		single adsorbate component now. Initialize in sample.f90 and initialize.f90, process and write file in sample.f90
+
+		TEST: isosteric_heat part has been test against Wongkoblap etal (PCCP,2008), Cimino etal (Langmuir 2017) and Zeng etal (Carbon,2017)
+			  10-4-3 Steele potential, Argon @ 87.3 K on graphitized carbon ------------ PASSED
+			  (results show good agreement even though the simulaiton model is different from literature's, see results in example folder)
+
+
+7-27-2018
+Archived v1.6 version.
+
+v1.6 
+4-12-2018
+	1. Add one more option for pressure calculation "IK&H" - evaluate by IK and H route together.
+	2. Fixed small mistakes in both iK and H method. e.g., don't include boundary for connecting line between i and j.
+
+ 	TEST: H=2sig, alpha=2.13 (for Ar case), P_IK peak value matches Yun Long's reported value.
+	      	Harasima test passed. Integral over the pore width gives the value in quantitative agreement with that of IK route
+	      	within deviation of 0.13%. But due to the open pore model, IK route and H route should be evaluated simultaneously to
+	      	get the quantitative agreement of their integrals.
+	      
+
+
+
+v1.6Beta3
+3-28-2018:
+	1. Add external field type "hard_slit_finitex", which is used together with Yun Long's atomistic open pore model. 
+	2. Fixed read in 'initconfig.in' file. Now works for also atomistic model (e.g., atomisitc substrate), but only for monoatomic adsorbate
+		like argon.
+
+
+3-26-2018:
+	1. Add an sampling option calculating the lattice constant: "lattice_const". Now, only calculate the 2D lattice constant. 
+	format:
+	'lattice_const'
+	lattconst_n
+	lattconst_cut(low)...
+	lattconst_cut(upper)...
+	lattice_freq 
+
+	2. Fixed Harasima route in STEELE_SLIT_FINITEX mode.
+
+3-23-2018:
+
+	1. Add an external field type "steele_slit_finitex". This is a finite slit pore surface model using 10-4-3 potential. The surface is finite in
+		x and z-direction, but infinite in y direction. 
+		
+		1. Averaging region is also automatically set to 6sigma_ff in the middle of the pore surface.
+		2. Also used an extended region as Yun Long suggests
+
+
+	2. Add zden_freq variable, so don't need to run z-density sampling every step.
+
+
+
+
+Update on 3-23-2018:
+	The cg results show that original cg_wall_strc is very good, so I don't have to bother to use modified version for now. But we can still
+	see if this modified version is better or not. 
+	I revert the code back to original cg_wall_strc version, but still keep codes of modified version. 
+	modified version means divide box to two regions, region1 for uniform surface, region2 for defect position.
+
+
+3-7-2018 modified by Kaihang:
+	1. Modified field type "cg_wall_strc", introduce two regions into the box, the defects 'region 1' has modified potential (cg_wall1.in)
+		, the perfect wall 'region 2' has original potential (cg_wall2.in).
+
+		Introduced two variables cg_wall1_egrid() and cg_wall1_dgrid() in global.f90 for modified potential
+
+
+
+3-5-2018: Incorporated into v1.6Beta2
+3-4-2018 modified by Kaihang:
+	1. Add an external field type "cg_wall_strc", which introduced an input file for the wall structure.
+		Points are calculated by interpolation.
+
+			format:
+	   		Field Type
+			cg_wall_strc
+			Position [A]   ! Bottom surface position (and for the minimum position of sine function), 
+			15.7397d0	   !the top surface position is symmetric to the bottom
+			Initz [A]      ! Starting point of solid-fluid calculation (starting point of pre-calculated potential position)
+			15.9038d0
+			Resolution [A] ! Resolution of coarse-grained fluid-solid potential 
+			0.03405d0 
+			
+
+2-26-2018 modified by Kaihang:
+	1. Add an external field type "cg_wall_cos", "sin" stands for sine function for mimicing the roughness of the top surface.
+	   The step function is characterized by width and depth. 
+
+	   !!! Note: must modified insert.f90 for pore insertion and initconfig.f90 for pore_volume.
+
+	   format:
+	   		Field Type
+			cg_wall_cos
+			Position [A]   ! Bottom surface position (and for the minimum position of sine function), 
+			15.7397d0	   !the top surface position is symmetric to the bottom
+			Initz [A]      ! Starting point of solid-fluid calculation (starting point of pre-calculated potential position)
+			15.9038d0
+			Resolution [A] ! Resolution of coarse-grained fluid-solid potential 
+			0.03405d0 
+			Parameters    ! Cosine Function parameters (number of periodicity and amplitude [A])
+			1 2.0d0
+
+
+
+
+
+v1.6Beta2
+2-25-2018 modified by Kaihang:
+	1. Add 'Harasima' definition to the pressure tensor calculations for the slit pore system. 
+	   Modified press_virial_slit.f90. Change all distance to site-site distance. 
+	   Optimize the output file format for z-density and virial_pressure_slit. (in sample.f90)
+
+	Test: H=2sig, alpha=2, IK test Passed
+	      H=2sig, alpha=2, Harasima test passed. Integral over the pore width gives the value in quantitative agreement with that of IK route
+	      	within deviation of 0.1%.
+	      H=3sig, alpha=20, IK test Passed
+	      H=3sig, alpha=20, Harasima test passed. Integral over the 1/2 pore width gives the value in quantitative agreement with that of IK route
+	      	within deviation of 0.03%.
+	      Normal and Tangential pressure calculation both passed.
+
+
+
+v1.6Beta
+1-24-2018 modified by Kaihang:
+
+	1. Optimized the bins for producing tangential pressure (virialpress_slit_bins) and bins for producing density profile (zden_bins).
+		Now, only for 'STEELE_SLIT_PORE' options, bins will count from the surface position (initialize.f90). For example, z_surface = 20, 
+		the density profile will start from z = 20 rather than z= 0. Vacuum slab will not be counted in any more to improve the running efficiency.
+
+	2. Reactivate the subroutine to gradually update the chemical potential for uVT ensemble. 
+		This treatment is for high density system (recommended by several papers)
+		add dmu(itype) in global.f90. Set up dmu(itype) in initialize.f90 
+
+		Right now, the starting chempot is -2084.716617d0 (Argon@87.3K, 2e-5bar)
+		Now, change 10 times,  Change block size accordingly.
+
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		Should Add this option to input file in the stable version.
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+		Update 2-25-2018:
+		This feature is turned off. This feature should be able to work for the system where the adsorbed phase is in direct contact with the 
+		bulk phase. This feature is not working for the infinite large system with PBC, because once the stable contact is formed, the insertion 
+		move is hard to insert another particle to such stable layer.
+
+11-15-2017 modified by Kaihang:
+
+	1. Add an external field type "cg_wall_ffpw", "ffpw" stands for piecewise function for fluid-fluid interaction.
+	   Read in "eff_sig.in" file for the effective sigma value
+	   Linear interopolation will be carried out for effective sigma value and Lorentz combining rule will be used for the interaction of 
+	   fluids between different z position
+
+	   format:
+	   		Field Type
+			cg_wall_ffpw
+			Position [A]   ! Bottom surface position, the top surface position is symmetric to the bottom
+			15.7397d0
+			Initz [A]      ! Starting point of solid-fluid calculation (starting point of pre-calculated potential position)
+			15.9038d0
+			Resolution [A] ! Resolution of coarse-grained fluid-solid potential 
+			0.03405d0 
+			Range [A]    ! Working range for using effective sigma value for fluid-fluid interaction: lower limit and upper limit
+			16.0d0 22.75d0
+
+
+11-5-2017 modification noted by Kaihang:
+	
+	1. Add an external field type "cg_wall". This external field is precalculated from free energy averaged method to get 
+		fluid-solid coarse-grained potential. The CG energy grid is only a function of the vertical distance to the surface (z). 
+
+		!! Note: CG_WALL IS NOW SLIT PORE MODEL
+
+		!!! Note: Maximum 10,000 energy points are allowed 
+		format:
+			Field Type
+			cg_wall
+			Position [A]   ! Bottom surface position, the top surface position is symmetric to the bottom
+			15.7397d0
+			Initz [A]      ! Starting point of solid-fluid calculation (starting point of pre-calculated potential position)
+			15.9038d0
+			Resolution [A] ! Resolution of coarse-grained potential
+			0.03405d0      
+
+
+
+
+
+
+v1.5
+8-6-2017 modification noted by Kaihang:
+
+	1. Add "steele_slit_pore" style. Molecules are in the slit pore under steele potential from top and bottom wall.
+	2. for slit pore geometry, we try to insert molecules specifically into the pore, not to walls.
+
+	Test:
+	1. "steele_slit_pore" is tested against this paper for H=8 A and 10 A: https://doi.org/10.1016/j.colsurfa.2004.09.041
+
+
+8-7-2017 modification noted by Kaihang:
+	
+	1. Add a Sampling Options "thermo_press_slit" !!!!!code not have been finished yet!!!!!
+	2. Add a Sampling Options "virial_press_slit" adapted from Deepti's code.
+
+8-11-2017 by Kaihang:
+
+	1. Add manual option to adjust the probability of translate/rotate/insert/rotate move to get better sampling for 
+		dense system.(now inactive. 8-11-2017)
+		Right now, needs three sets of probabilities: 1 for initial, 1 for later half part of equilibrium, 1 for the 
+		production stage. 
+
+	2. Added "Relax stage" in the simulation. 
+		Add "relax" subroutine
+		Note: Relax blocks are not included in the total number of blocks in input file.
+
+8-13-2017 by Kaihang:
+	
+	1. Add a subroutine to gradually update the chemical potential for uVT ensemble. 
+		This treatment is for high density system (recommended by several papers)
+		add dmu(itype) in global.f90. Set up dmu(itype) in initialize.f90 
+
+		Right now, the starting chempot is -2084.716617d0 (Argon@87.3K, 2e-5bar)
+		Now, change 4 times,  Change block size accordingly.
+
+		(NOW INACTIVE, 8-16-2017)
+
+	TEST:
+
+		1. 30 relax blocks, 500 equil, 1000 tot, 100000 block size, 0.4 displacement, 0.6 transfer
+		Match yun's data, 378 argon, Pt=20547bar (~19000bar)
+		2. 30 relax blocks, 1000 equil, 2000 tot, 100000 block size, 0.4 displacement, 0.6 transfer
+		Match deepti's simulation, a_10, H_3, 270 argon (271 deepti), Pt= 90584 bar (92579bar)   81455 bar (81624bar)
+		3. 30 relax blocks, 1000 equil, 2000 tot, 100000 block size, 0.4 displacement, 0.6 transfer
+		Match deepti's simulation, a_39, H_3, 300 argon (302), Pt not match 473660 bar ()
+
+8-18-2017 by Kaihang:
+
+	It seems like for a slit pore system, the volume (vol(ibox)) should be the middle space which is accessible to molecules. 
+	we modified the whole code 
+
+	I was convinced that the volume used inthe acceptance crieteria should be the volume of pore(doi:10.1021/la0495682), not the system.
+	In order to not confused with ewald sum. dont use vol in mol_act calculation
+
+	1. Change system volume to pore volume for mol_act when external field is HARD_WALL, STEELE, STEELE_SLIT_PORE.
+		Add vol_pore(ibox) variable in global.f90. 
+		vol_pore(ibox) is initiated in initconfig.f90
+	2. Fix linit=.false. in initconfig.f90. Program can read old configuration file (*.xyz) right now, but only pore Argon.
+
+		TEST:
+		1. NIST WATER REF... Pass
+		2. NPT SPC Water @ 400K, 0.7 bar, widom ----------------- PASSED
+    	3. uVT argon @ 87.3K, 0.01 bar --------------------------- PASSED
+    	4. Steele slit pore test (Do_Langmuir_2004, doi:10.1021/la0495682), 
+    		1). 200K, 4.879bar, mu=-2618.54K, H=10A, N=141.5 (reported 138.5)  ... Passed
+    		1). 200K, 4.879bar, mu=-2618.54K, H=12A, N= 172.7 (reported 167)
+    	5. Yun tangential pressure, argon 87.3 K, 1bar , 0.333 displace , 0.33/0.33 insert/remove:
+    		Pt = 19606 (~19000 bar reported)
+
+
+
+		
+
+
+
+
+
+
+v1.4:
+3-13-2017 modification noted by Kaihang:
+	
+	1. Completed 'EXPLICIT' mixing rule. Added 'qex' and 'qsqex' variables. Only adsorbate-surface perturbated charge
+		can be used right now. Later adsorbate-adsorbate perturbated charge can be incorporated in the program.
+
+	2. Optimized eng_ij subroutine. If epsilon is zero, no calculation will be carried out.
+
+
+	Test:
+
+	NIST WATER REF TEST 3 ----------------- Passed
+
+	NPT SPC WATER 400K, 0.7 bar, widom ---- Passed
+
+	uvt spc WATER WITH slab correction and z-density test with graphene surface @ 400K, u= -6309.1112149(0.9bar), 
+	    Explicit mixing rule, Unperturbated (to see if reproduce the bulk density) box=24*25*200    ------------ passed
+    	- bulk density~ 0.503e-3. (nist: 0.49E-3)
+    	- z-density compare with v1.3.2 --- almost consistent
+    	- initial energy compare with v1.3.2 ----- Exactly the same (total 0.7732067E+17 K)
+
+
+    Test Explicit mixing rule (cs)
+    uvt Argon graphene_checked-1-2-0/0.1bar/ with tail correction ------------- Passed
+    	- try to compare with previous Towhee results.
+    	- surface excess:
+    		0.0234 mmol/m2 (sim)
+    		0.0242 mmol/m2 (towhee)
+    	- bluk density:
+    		7.95e-4 (sim)
+    		7.92e-4 (towhee)
+
+
+
+	3. Packed to v1.4 version.
+
+	4. For now, the simulation format works well for diatomic polar molecules, but for triatomic molecule like water, we need to
+		modify code again according to the mixing rule. 
+		* Updated 7-10-2017: We've modified the mixing rule on the report (May 15 2017), so no need to modify the code for now.
+
+
+
+
+v1.3.3:
+3-1-2017 modification noted by Kaihang:
+
+	1. Added 10-4-3 Steele potential in External Field (perpendicular to z axis). There is a corresponding hard wall on the 
+		top of the box and this can be changed later to upper Steele potential (slit pore model)
+    2. Added 'Number of Nonbonded Types' (n_nonbond_types) in read_input subroutine (for steele potential use)
+    3. Changed 'Thickness' label of Hard wall potential to 'Half Thickness' in read_input subroutine
+    4. Added a 'Field Energy' output in final energy summary (stat.f90)
+
+
+    Test:
+
+    NIST WATER REF TEST 3 ------------------ PASSED
+    NPT SPC Water @ 400K, 0.7 bar, widom ----------------- PASSED
+    uVT argon @ 87.3K, 0.01 bar --------------------------- PASSED
+    Do and Do JPCB 2006: 1. 87.3K Ar, 0.01 bar, 30% percentage defect, Rc=2.84 -------- PASSED
+   						 2. 87.3K Ar, 0.01 bar, 0% percentage defect,  -------- PASSED
+   						 2. 87.3K Ar, 0.1 bar, 0% percentage defect, turned off cut for steele -------- PASSED
+   						 	- 0.01289 mmol/m2 (sim)
+   						 	- 0.013   mmol/m2 (paper fig8)
+   						 	- rho = 5.5215e-4 g/ml (nist)
+   						 	- rho = 5.54e-4 - 5.64e-4 g/ml (sim)
+   						 3. 87.3K Ar, 0.001 bar, 30% percentage defect, Rc=2.84, turned off cut for steele -------- PASSED..
+   						    - 0.00121 mmol/m2 (paper fig8)
+   						    - 0.00164 mmol/m2 (sim)
+   						 4. 87.3K Ar, 0.1 bar, 30% percentage defect, Rc=2.84, turned off cutoff for steele -------- PASSED
+   						    - 0.012 mmol/m2 (sim)
+   						    - 0.01239 mmol/m2 (paper)
+   						 5. 87.3K Ar, 0.0001 bar, 30% percentage defect, Rc=2.84, turned off cut for steele -------- PASSED
+   						 	- 0.00044 mmol/m2 (Do and Do paper)
+   						 	- 0.00081 mmol/m2 (sim)
+   						 	- 0.00072 mmol/m2 (exp from QSDFT paper)
+   						 	- rho = 5.5e-7 g/ml (nist)
+   						 	- rho = 5.6e-7 g/ml (sim)
+
+   	4. Packed to v1.3.3
+
+
+
+
+v1.3.2: 
+2-21-2017 modification noted by Kaihang: 
+
+	This modification is based on version v1.3.1.
+
+	1. Using Ewald sum to explicitly calculate adsorbates-surface interaction, and this method 
+		explicitly exclude self/intra term of surface in k-space. 
+
+		We can use 'Explicit' mixing rules option to turn it on. 
+
+		USE 'EXPLICIT' MIXING RULE IF WANT TO DO SURFACE ADSORPTION SIMULATION WITH CHARGES.
+
+	2. Modified v1.3.1 version about "Spherical cut-off for ad-surf interaction" option, now we also include 
+		the slab correction term for surface under this "direct coulomb" method. v1.3.1 doesn't include this term.
+		We may need simulation to test this modification. (or the whole "direct coulomb" method is not suitable for adsorption sim)
+		- FAILED
+		- Not correct to use spherical cut-off method to calculate ad-surf interaction
+
+		NIST water ref test 3  ------------------------------- PASSED
+		NPT SPC Water @ 400K, 0.7 bar, widom ----------------- PASSED
+		uvt Argon graphene_checked-1-2-0/0.001bar/ without tail correction ------------- PASSED
+		uvt Argon widom test @ 87.3K and 4e-5bar ------------- PASSED
+
+
+		uvt spc WATER WITH slab correction and z-density test with graphene surface @ 400K, u= -6309.1112149(0.9bar) ----- 
+    	------------ (to see if reproduce the bulk density) box=24*25*200  ------ Passed 
+    	- bulk density~ 0.48e-3. (nist: 0.49E-3)
+
+    	uvt spc WATER WITH slab correction and z-density test with graphene surface @ 400K, u= -6412 (0.7bar) ----- 
+    	------------ (to see if reproduce the bulk density) box=24*25*200  ------ PASSED
+    	- bulk density~ 0.42E-3 (maybe preset chemical potential is not accurate - confirmed)
+
+
+
+    3. Packed this version to v1.3.2.
+
+
+
+
+V1.3.1: 
+2-19-2017 noted by Kaihang:
+
+	1. Add an option "Spherical cut-off for ad-surf interaction" in input file.
+		format 
+		    .true./.false.
+		    rscelect [A]
+		If this option is true, that means, all the Coulombic adsorbates-surface interactions will not use Ewald sum,
+		but use direct spherical cut-off method. While Ewald sum will be still used for adsorbates-adsorbates interactions.
+
+
+		NIST water ref test 3 ------------------------------------------  passed
+		NPT SPC Water @ 400K, 0.7 bar/0.9 bar, widom -------------------  passed
+
+		Simulation results show that direct Coulombic interaction between adsorbates and surface sites cannot reproduce the 
+		results made by Ewald sum. Very large deviation.
+
+ 	2. Packed it to v1.3.1 version.
+
+
+
+
+
+v1.3: 
+2-7-2017 noted by Kaihang:
+	
+	1. Fixed an output problem for surface_excess.
+
+	All of following simulations DIDN'T use tail corrections, 
+	while previous simulations used tail correction (I think it's wrong to use tailc)
+
+ 	uvt Argon graphene_checked-1-2-0/0.1bar/ ------------- Passed 
+ 	-bulk density ~ 0.55E-3 g/ml; surface excess a little bit lower than tailc one
+
+ 	uvt Argon graphene_checked-1-2-0/0.03bar/ ------------- Passed  
+ 	- bulk density ~  0.161e-3 g/ml; surface excess (0.01486) a little bit higher than tailc one (0.01438)
+ 	- within the std
+
+ 	uvt Argon graphene_checked-1-2-0/0.001bar/ without tail correction ------------- Passed 
+ 	- bulk density ~ 5.48e-6 g/ml (NIST: 5.5e-6 g/ml); surface excess(0.0128220) lower than tailc one (0.01313)
+ 	- Tail correction has more prominent effect on lower pressure
+
+ 	uvt Argon graphene_checked-1-2-0/0.001bar/ with tail correction ------------- Failed
+ 	- surface excess (0.0131338) is exactly the same as previous Towhee one 
+ 	- bulk density ~ 7.46e-6 g/ml doesn't match NIST value.
+ 	- Interfacial system cannot use conventional tail correction!!!
+
+
+
+
+2-6-2017 noted by Kaihang:
+1. Allow user to specifically define kmax in each direction. So in slab geometry, we may be able to set kmax=55 in z direction, 
+	but kmax=6 in x or y direction. This fix largely reduce the computational time. (kmax=20)2.36hr -> (kmax=7,7,25)0.81hr
+
+	NIST water ref test 3----------------------------------------------------  passed
+
+	uvt SPC Water @ 400K, 0.9 bar without tail correction -------------------  passed (sim. results ~ 0.503E-3)
+
+	uvt spc WATER with slab correction and z-density without tail correction test no surface @ 400K, u= -6309.1112149(0.9bar), 
+	kmax = 7,7,25 (0.81hr)-------------------- Passed (bulk density ~ 0.505E-3). box = 24*24*200
+
+	kmax=7,7,25 with slab correction > kmax=20 with slab correction > kmax=7 with slab correction > kmax=7 without slab correction
+	('>' means results are better than ...)
+
+	uvt spc WATER WITH slab correction and z-density test with graphene surface @ 400K, u= -6309.1112149(0.9bar) ----- 
+    ------------ (to see if reproduce the bulk density) box=24*25*200  ------ Passed 
+    (bulk density~0.503E-3)
+
+    uvt spc WATER WITHOUT slab correction and z-density test with graphene surface @ 400K, u= -6309.1112149(0.9bar) ----- 
+    ------------ (to see if reproduce the bulk density) box=24*25*200  ------ Failed. 
+    (bulk density ~ 0.7E-3, that means slab correction part works fine)
+
+2. Add 'surface_excess' function to program. 'surface_excess' is used to calculate excess adsorption.
+	Accessible volume and pre-set bulk density are required in the input file.
+	(Maybe not need this, we can directly calculate it from <N>)
+
+
+
+
+
+
+2-5-2017 noted by Kaihang:
+1. Add z-density function to the program. Z density function could only be applied to box 1 and volume-fixed ensemble right now.
+2. All sampling functions are in sample.f90..
+3. Add 'Sampling Options' in input file
+
+   NIST water ref test 3----------------------------- passed
+
+   NPT SPC Water @ 400K, 0.9 bar -------------------  passed
+
+   uvt spc WATER with slab correction and z-density test with graphene surface @ 400K, u= -6309.1112149(0.9bar) ----- 
+   ------------ (to see if reproduce the bulk density) Failed.... seems like kmax in z too small
+
+   uvt spc WATER with slab correction and z-density test no surface @ 400K, u= -6309.1112149(0.9bar)--------
+   check simulation results with kmax =20 (2.36hr) (z-density to match 0.9 bar density ~ 0.55 E-3, other simulation z-density is 0.6E-3 or above)
+   So, more kmax in z direction should be used, in Berkowitz paper, he used 55.
+
+   larger in z direction, more kmax should be in z direction. 2pi/lz * nz, lz get larger, 
+   nz should get larger to achieve same cut off in fourier space.
+
+
+
+v1.2
+2-3-2017 noted by Kaihang:
+1. Add slab geometry correction for Ewald sum in slit pore.
+   NIST water ref test3----------------------------- passed
+   Two point charge test following Berkowitz -------- passed
+
+2. Fixed vdW tail correction in volchange_npt subroutine. Widom subroutine may require this fix.
+   NPT SPC Water widom test @ 400K, 0.7 bar --------- passed perfectly
+   NPT Argon widom test@87.3K 0.2bar ---------------- passed
+
+3. Encountered Segmentation fault. Move ewld_slab to 'global_allocate' subroutine. 
+	ALL ALLOCATABLE VARIABLES MUST BE ALLOCATED BEFORE SETTING TO A VALUE!!
+
+
+2-2-2017 noted by Kaihang:
+
+1. Coded external field 'Hard Wall'. added 'eng_field.f90' which is used to calculate the energy with external field.
+2. Add internal coordinates for external structure in 'initconfig.f90'. Ready for real interfacial system test
+3. Fixed print potential parameters issue in 'initialize.f90'.
+4. Add minimum image convension when calculating ewald intra term in set_ewldself.f90 (Towhee did the same)
+5. real interfacial system test for SPC water vapor adsorbed on checked graphene (without slab correction).
+
+	uVT SPC water @400K u = -6416.049K against Towhee------ passed
+	uVT SPC water @400K u = -6000.0K against Towhee-------- towhee N~17, mycode ~23 !!!
+	NIST water ref test3----------------------------------- passed
+
+
+
+2-1-2017 noted by Kaihang:
+
+Coded uVT ensemble, added 'insert.f90' and 'remove.f90' subroutines.
+NIST water ref test------------------- passed
+NPT Argon test @ 87.3K 4e-5bar-------- passed
+NPT Argon test @ 87.3K 2.4bar--------- passed
+NPT SPC Water gas test @ 400K 0.7 bar- passed
+NPT SPC Water gas test @ 400K 0.9 bar- passed
+uVT argon @ 87.3K 0.4bar-------------- passed
+uVT argon @ 87.3K 4e-5bar------------- passed
+uVT argon @ 87.3K 0.9bar-------------- passed
+uVT SPC water gas test @ 400K 0.7 bar- passed
+uVT SPC water gas test @ 400K 0.9 bar- passed
+
+
+1-30-2017 noted by Kaihang:
+
+Fixed Ewald sum method. All problems encountered before may be due to the wrong implementation of Ewald Sum scheme.
+Add 'ewald_fix_kmax' style (rcelect = minbox/2, alpha = kalp/minbox, kmax fixed)
+This version successfully reproduce the water vapor density at .5, .7 and .9 bar @400K.
+NIST Water Ref. test: passed
+Widom insertion method tested using argon @87.3K. match density and chemical potential.
+Widom insertion method results match @ 400K 0.7bar by comparison with Towhee results
+Liquid water density result is in agreement with that in Jorgenson's paper. But chemical potential is somehow different from web value
+(there are large statistic errors there, maybe it is due to the method we use)
+
+------------------------------------------------------------------------------------------------------------------------------------------
+End of Programming Log
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+ ewald_fix_kmax: (refer to towhee)
+ if you want to use point charges with an Ewald sum that utilizes a constant number of inverse space vectors (kmax) and a variable electrostatic cutoff (rcelect) equal to half the current box length. When using this option you also need the following variables.
+
+
+
+1. Do NOT to change the label format in input.in, mol.in file.
+
+2. No need to assign pressure if ensemble is not NPT. Just leave pressure alone, the program will skip this record.
+
+Check original code for input format for 'Sampling Options' section
+
+Input sequence of molecules should be consistent throughout the whole program
+
+Random number generator generates uniform random number between [0,1)
+
+Ensembles:
+NPT simulation only allows cubic box and there is no external structure in the box
+
+
+linit:
+Flag to determine if reading the whole initial configuration from external file
+.true.  : create initial config from the scratch
+.false. : read initial config from external file
+if reading from external file, Initial style, inix..., box dimension still should be set, but arbitrarily. 
+
+
+
+Potential form:
+potentials have only one form now
+Lennard-Jones
+later, other potential form will be added
+r_min is inner cut-off radius to speed up LJ system, usually set to 0.1d0 Angstrom
+
+Nonbonded coefficient format
+sigma in A
+epsilon in K
+
+
+
+
+Mixing rules:
+two types of mixing rules
+Lorentz-Berthelot
+Explicit: Specifically designed to test conformal sites model
+		  When calculated electrostatic 
+
+
+
+
+
+Units:
+epsilon [K]
+sigma [Angstrom]
+Note: epsilon(1,1,2,2) means epsilon between site 1 on molecule type 1 and site 2 on moelcule type 2
+
+
+Hard Wall external potential: 
+(center set on z=0, thickness is radius, it will appear both on the bottom and the top of the box)
+Field Type
+hard_wall
+Half Thickness
+30.0d0
+
+10-4-3 Steele Wall potential:
+(perpendicular to z, there will be a corresponding hard wall on the top of the box for now, 
+ later can be changed to slit pore model)
+Field Type
+steele_wall
+Position [A]
+30.0d0
+Cutoff [A]
+20.0d0
+Delta [A]
+3.35d0
+Rho_s [A^-3]   
+0.114d0
+Interaction Parameters
+nonbondtype1   sigma_sf[A]    epsilon_sf[K]
+nonbondtype2   sigma_sf[A]    epsilon_sf[K]
+..... List all nonbonded types
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
