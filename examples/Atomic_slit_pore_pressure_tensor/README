@@ -1,0 +1,4 @@
+This example models argon adsorption in a realistic carbon pore. Local pressure tensor by different definitions (e.g., Irving-Kirkwood) are calculated during the simulation. Density profile in z-direction is also sampled.
+
+Reference:
+[1] K. Shi, E.E. Santiso, K.E. Gubbins, Can we define a unique microscopic pressure in inhomogeneous fluids?, J. Chem. Phys. 154 (2021) 084502. https://doi.org/10.1063/5.0044487.
