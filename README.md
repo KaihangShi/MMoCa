@@ -9,7 +9,7 @@ The source codes are in ```/src/```. To compile, simply goto the ```/src/``` dir
 Compiler such as ```gfortran``` or ```ifort``` is required. 
 
 ## Getting Started
-**/examples/**. This directory contains examples of short MMoCa simulations in
-NPT and grand canonical ensembles for a number of systems that I have presented in my paper. 
+**/examples/**. This directory contains examples of short MMoCa simulations in NPT and grand canonical ensembles for a number of systems that I have presented in my paper. 
+
 **/docs/**. This directory contains user manual for setting up the input files and logs of program development. 
 
