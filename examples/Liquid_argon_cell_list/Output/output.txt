@@ -1,0 +1,154 @@
+=====================================================
+                                                     
+ Monte Carlo Simulation Package v2.2, by Kaihang Shi
+ Department of Chemical & Biomolecular Engineering
+ North Carolina State University, Raleigh, NC, USA
+ Created on Dec. 4th, 2016
+ Last modified in June 2020
+                                                     
+ ====================================================
+Random number seed: -46111
+Ensemble: NPT
+Temperature [K]:   90.00
+Pressure [bar]:      10.0000000
+Number of boxes: 1
+Number of molecule types: 1
+Maximum number of sites on a molecule: 1
+Total number of molecules in box 1: 8000
+Mixing rules: Lorentz-Berthelot
+r_cutoff:  20.000
+r_min:   0.100
+Number of nonbonded types: 1
+No.          Molecule
+1            Ar    
+No.          Site
+1            Ar    
+  
+ Potential form: Lennard-Jones
+ Mixing rules: Lorentz-Berthelot
+ No.  Atom(i)   No.  Atom(j)         sigma[A]           epsilon[K]         charg
+ e[e]
+ 1   Ar         1   Ar                 3.4050           119.8000             0.0000
+Initial volume of the box 1 is:          385895.1114
+Initial pore volume of the box 1 is:          385895.1114
+ !--- Warning: pore volume should be equal to the total system volume in NON-sli
+ t-like pore. ---!
+Box 1 has successfully read from old configuration
+ Initialization of configurations is completed.
+Box 1 has been successfully wrapped
+kmax for box 1: 7   7   7
+Initial Alpha in Ewald Sum:      0.000
+Initial rcelect:      0.000
+Number of relax blocks: 0
+Total number of simulation blocks: 3
+Number of equilibrium blocks: 2
+Block size: 100
+Cell list will be applied to accelerate simulations!
+Initial number of cells in x, y, z-direction:   3     3     3
+Initial size of cells in x, y, z-direction: 24.27   24.27   24.27
+Probabilities of selecting translational move: 0.900
+Probabilities of selecting rotational move: 0.001
+Probabilities of selecting transfer move: 0.000
+Probabilities of selecting volume move: 0.099
+ Starting Simulation ...
+* Steps: 100 * 
+Block Average for Block 1
+Box: 1
+Box Length:   72.733    72.733    72.733
+Box Volume:          384767.5433
+Pore Volume:          385895.1114
+Total Energy:  -0.5834823E+04 [J/mol]     -0.5614144E+07 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:   8000.000
+Number Density:   0.2073474E-01[A^-3]    0.1375444E+01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 84  Accepted: 19  Accepted Ratio:  22.619 %
+Max Displacement:   0.60
+  Volume Change Move 
+Attempted: 16  Accepted: 7  Accepted Ratio:  43.750 %
+Max Volume Change:   0.01
+* Steps: 200 * 
+Block Average for Block 2
+Box: 1
+Box Length:   72.796    72.796    72.796
+Box Volume:          385761.4860
+Pore Volume:          385895.1114
+Total Energy:  -0.5835114E+04 [J/mol]     -0.5614424E+07 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:   8000.000
+Number Density:   0.2073990E-01[A^-3]    0.1375786E+01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89  Accepted: 24  Accepted Ratio:  26.966 %
+Max Displacement:   0.36
+  Volume Change Move 
+Attempted: 11  Accepted: 6  Accepted Ratio:  54.545 %
+Max Volume Change:   0.01
+* Steps: 300 * 
+Block Average for Block 3
+Box: 1
+Box Length:   72.731    72.731    72.731
+Box Volume:          384725.6491
+Pore Volume:          385895.1114
+Total Energy:  -0.5835649E+04 [J/mol]     -0.5614939E+07 [K]
+rcelect:  0.0000000
+alpha:  0.0000000
+Molecule type: 1  Ar    
+Molecule Number:   8000.000
+Number Density:   0.2076612E-01[A^-3]    0.1377525E+01[g/ml]
+Mu:                    0.0000000 [K]
+  Translational Move 
+Attempted: 89  Accepted: 47  Accepted Ratio:  52.809 %
+Max Displacement:   0.35
+  Volume Change Move 
+Attempted: 11  Accepted: 1  Accepted Ratio:   9.091 %
+Max Volume Change:   0.01
+ 
+ +++++ End of Markov Chain +++++
+ 
+ 
+Final Energy for Box: 1
+Total Energy                        -0.5615623E+07 [K] 
+Inter vdW                           -0.5615623E+07 [K] 
+vdW Tail Correction                  0.0000000E+00 [K] 
+Total Coulomb                        0.0000000E+00 [K] 
+   Real Space (Inter-molecular)      0.0000000E+00 [K] 
+   Fourier Space                     0.0000000E+00 [K] 
+   Self Correction                   0.0000000E+00 [K] 
+   Intra-molecular                   0.0000000E+00 [K] 
+   Slab Correction                   0.0000000E+00 [K] 
+External Field                       0.0000000E+00 [K] 
+ 
+Block Averages for Equilibrium Stage (2 blocks)
+                    Units     Type    Box     Average           Standard Deviati
+ on
+Total energy        J/mol              1      -0.5834969E+04     0.1454786E+00
+                      K                1      -0.5614284E+07     0.1399765E+03
+Molecule Number                 1      1       8000.000          0.0000000E+00
+Number Density      A^-3        1      1       0.2073732E-01     0.2580351E-05
+Density             g/ml        1      1       0.1375615E+01     0.1711681E-03
+ 
+Block Averages for Production Stage (1 blocks)
+                    Units     Type    Box     Average           Standard Deviati
+ on
+Total energy        J/mol              1      -0.5835649E+04     0.0000000E+00
+                      K                1      -0.5614939E+07     0.0000000E+00
+Molecule Number                 1      1       8000.000          0.0000000E+00
+Number Density      A^-3        1      1       0.2076612E-01     0.0000000E+00
+Density             g/ml        1      1       0.1377525E+01     0.0000000E+00
+Mu                   K          1      1           0.0000000     0.0000000E+00
+ 
+ ---------- Block Averages ----------
+Box: 1
+ Block    Energy[J/mol]           Mol Number
+    1     -0.5834823E+04        8000.000
+    2     -0.5835114E+04        8000.000
+    3     -0.5835649E+04        8000.000
+  
+Total CPU TIME:   0.1116948E+03 s       0.03 hrs
+Date: 21:47    2/25/2021
